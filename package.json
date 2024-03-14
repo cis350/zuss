@@ -1,0 +1,19 @@
+{
+  "name": "zuss-1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cis350/zuss.git"
+  },
+  "author": "HECAL",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cis350/zuss/issues"
+  },
+  "homepage": "https://github.com/cis350/zuss#readme"
+}
