@@ -1,6 +1,8 @@
-const { MongoClient } = require('mongodb');
+require('dotenv').config();
 
-const url = 'mongodb+srv://exi03:GTwzDG9pK4FDDJmG@zuss.snmyvzd.mongodb.net/';
+const { MongoClient } = require('mongodb');
+const url = process.env.MONGODB_URI;
+console.log(url);
 const dbName = 'FormInputs';
 const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -12,7 +14,6 @@ async function connect() {
         return db;
     } catch (err) {
         console.error('Failed to connect', err);
-        // eslint-disable-next-line no-undef
         process.exit(1);
     }
 }
