@@ -1,9 +1,8 @@
 require('dotenv').config();
 
 const { MongoClient } = require('mongodb');
-const url = process.env.MONGODB_URI;
 const dbName = 'FormInputs';
-const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
+const client = new MongoClient(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 async function connect() {
     try {
