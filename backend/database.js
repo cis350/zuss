@@ -15,26 +15,21 @@ async function connect() {
         process.exit(1);
     }
 }
-async function insertSampleData() {
+async function insertAccountData(user, pass) {
     const db = await connect();
-    const collection = db.collection('Clubs');
-
-    const sampleData = [
-        { clubName: 'WUEC', eventName: 'Pitch Night' },
-        { clubName: 'WiCS', eventName: 'Networking' },
-    ];
+    const collection = db.collection('ProfileInfo');
 
     try {
-        const result = await collection.insertMany(sampleData);
+        const result = await collection.insertOne({ username: user, password: pass});
         console.log(`${result.insertedCount} documents were inserted`);
     } finally {
         await client.close();
     }
 }
 
-async function fetchClubsData() {
+async function fetchAccountData() {
     const db = await connect();
-    const collection = db.collection('Clubs');
+    const collection = db.collection('ProfileInfo');
 
     try {
         const data = await collection.find({}).toArray(); 
@@ -44,4 +39,4 @@ async function fetchClubsData() {
     }
 }
 
-module.exports = { connect, insertSampleData, fetchClubsData};
+module.exports = { connect, insertAccountData, fetchAccountData};
