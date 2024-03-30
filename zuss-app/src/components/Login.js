@@ -13,7 +13,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
       e.preventDefault();
       const userInfo = { username, password };
-      const endpoint = isLogin ? '/login' : '/create-account';
+      const endpoint = isLogin ? '/login' : '/sign-up';
       const url = `http://localhost:4000${endpoint}`;
 
       try {
