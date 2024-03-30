@@ -27,12 +27,15 @@ async function connect() {
 async function insertAccountData(user, pass) {
     const db = await connect();
     const collection = db.collection('ProfileInfo');
-
+    const existing = await collection.findOne({ username: user });
+    if (existing) {
+        throw new Error('Username already exists');
+    }
     try {
         const result = await collection.insertOne({ username: user, password: pass});
         console.log(`${result.insertedCount} documents were inserted`);
-    } finally {
-        await client.close();
+    } catch(error) {
+        throw new Error(error);
     }
 }
 
@@ -45,9 +48,12 @@ async function fetchAccountData() {
     try {
         const data = await collection.find({}).toArray(); 
         return data; 
-    } finally {
-        await client.close();
+    }  catch (error) {
+        throw new Error(error);
     }
 }
 
-module.exports = { connect, insertAccountData, fetchAccountData};
+
+
+
+module.exports = { connect, insertAccountData, fetchAccountData, client};

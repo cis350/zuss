@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "start-frontend": "cd zuss-app/src && npm start",
+    "dev": "concurrently \"npm start\" \"npm run start-frontend\""
   },
   "author": "",
   "license": "ISC",
@@ -12,5 +15,8 @@
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "mongodb": "^6.5.0"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
 }
