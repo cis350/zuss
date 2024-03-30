@@ -9,15 +9,19 @@ const Login = () => {
     const [isLogin, setIsLogin] = useState(true); 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
   
     const handleSubmit = async (e) => {
       e.preventDefault();
       const userInfo = { username, password };
+      console.log(isLogin);
       const endpoint = isLogin ? '/login' : '/sign-up';
       const url = `http://localhost:4000${endpoint}`;
+      
 
       try {
-        const response = await fetch(url, {
+        console.log(url);
+        const response = await fetch(`http://localhost:4000/sign-up`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(userInfo),
