@@ -13,7 +13,7 @@ Then navigate to your project directory and install your project dependencies as
 by running "npm install" (make sure to do this in the backend and frontend folders as
 well as install general dependencies in the parent directory)
 
-to run the  app: cd backend > node index.js
+to run the  app: run npm start in the root directory
 
 *ENVIRONMENT VARIABLES - important!
 Everyone will have to set up their own environment variables to store the database credentials.
