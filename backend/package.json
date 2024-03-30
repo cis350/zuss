@@ -5,9 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "start-frontend": "cd zuss-app/src && npm start",
-    "dev": "concurrently \"npm start\" \"npm run start-frontend\""
+    "start": "nodemon"
   },
   "author": "",
   "license": "ISC",

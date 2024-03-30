@@ -61,19 +61,14 @@ app.post('/login', async(req, res) => {
   const {username, password} = req.body; 
 
   try { 
-  let allData = await database.fetchAccountData(); // retrieve all users currently in database
+  let allData = await database.fetchAccountData();
+  console.log("alldata:", allData); // retrieve all users currently in database
   // retrieve the username and password in the database that matches the request user 
   const user = allData.find(u => u.username === username && u.password === password);
 
   if (!user) { 
     // if we can't return a matching object, means password is incorrect
     res.status(500).send({message: "Invalid username or password."})
-  }
-
-  // if we have a user and their username matches that in session already, 
-  // they are already logged in  
-  if (req.session.user && req.session.user.username === user.username) {
-    return res.status(200).send({message: "User already logged in."});
   }
 
   // if we successfully retrieve matching user and other status messages
