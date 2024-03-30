@@ -4,7 +4,6 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
-
 const Login = () => {
     const [isLogin, setIsLogin] = useState(true); 
     const [username, setUsername] = useState('');
@@ -20,14 +19,16 @@ const Login = () => {
       
 
       try {
-        console.log(url);
-        const response = await fetch(`http://localhost:4000/sign-up`, {
+        
+        const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(userInfo),
         });
         if (response.ok) {
+          console.log(url.length);
             console.log('Success:', await response.text());
+         
           } else {
             console.error('Failed:', response.statusText);
           }
@@ -35,7 +36,7 @@ const Login = () => {
           console.error('Error:', error);
         }
   
-      console.log(userInfo);
+        console.log("isLogin:", isLogin, "Credentials:", userInfo, "URL:", url);
     };
   
     return (
