@@ -89,7 +89,7 @@ app.post('/login', async(req, res) => {
 //tester endpoint, feel free to delete
 app.get('/accounts-data', async (_req, res) => {
   try {
-    await database.insertAccountData('emily', 'pass'); 
+    await database.insertAccountData('u', 'pass'); 
     const data = await database.fetchAccountData(); 
     res.json(data);
   } catch (error) {
@@ -98,17 +98,20 @@ app.get('/accounts-data', async (_req, res) => {
   }
 });
 
-app.use(express.static(path.join(__dirname, 'build')));
-
+app.use(express.static(path.join(__dirname, '../zuss-app/build')));
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname+'/build/index.html'));
+  res.sendFile(path.join(__dirname, '../zuss-app/build/index.html'));
 });
 
 
-const port = process.env.PORT || 4000;
+
+
+const port = 8000; 
 const server = app.listen(port, () => {
-  console.log('Server is running on http://localhost:4000');
+  console.log(`Server running on http://localhost:${port}`);
 });
+
+
 
 
 process.on('SIGINT', async () => {

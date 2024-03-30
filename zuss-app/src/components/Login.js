@@ -4,10 +4,14 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
+import { useNavigate } from 'react-router-dom';
+
 const Login = () => {
+  const navigate = useNavigate();
     const [isLogin, setIsLogin] = useState(true); 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
   
     const handleSubmit = async (e) => {
@@ -15,7 +19,7 @@ const Login = () => {
       const userInfo = { username, password };
       console.log(isLogin);
       const endpoint = isLogin ? '/login' : '/sign-up';
-      const url = `http://localhost:4000${endpoint}`;
+      const url = `http://localhost:8000${endpoint}`;
       
 
       try {
@@ -28,12 +32,15 @@ const Login = () => {
         if (response.ok) {
           console.log(url.length);
             console.log('Success:', await response.text());
+            navigate('/homepage');
          
           } else {
+            setErrorMessage('Failed: ${response.statusText}');
             console.error('Failed:', response.statusText);
           }
         } catch (error) {
           console.error('Error:', error);
+          setErrorMessage(`Error: ${error.message}`);
         }
   
         console.log("isLogin:", isLogin, "Credentials:", userInfo, "URL:", url);
@@ -84,6 +91,7 @@ const Login = () => {
           >
             {isLogin ? 'No account? Create one' : 'Already have an account? Login'}
           </Button>
+          {errorMessage && <div style={{ color: 'red', marginTop: '10px' }}>{errorMessage}</div>}
         </form>
       </Container>
     );
