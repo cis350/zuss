@@ -1,9 +1,14 @@
+// load environment variable from .env file 
 require('dotenv').config();
 
+// set up mongoDB ... initialize mongodb client with URI 
 const { MongoClient } = require('mongodb');
 const dbName = 'FormInputs';
 const client = new MongoClient(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
+
+
+// asynchronously connect to mongoDB database 
 async function connect() {
     try {
         await client.connect();
@@ -15,6 +20,10 @@ async function connect() {
         process.exit(1);
     }
 }
+
+// take in username and password, connect to database
+// then insert document in profileInfo collection 
+// log number of inserted documents for testing for how many users were added 
 async function insertAccountData(user, pass) {
     const db = await connect();
     const collection = db.collection('ProfileInfo');
@@ -27,6 +36,8 @@ async function insertAccountData(user, pass) {
     }
 }
 
+// this gives you all the profile data as an array 
+// can be used in other parts of interaction 
 async function fetchAccountData() {
     const db = await connect();
     const collection = db.collection('ProfileInfo');
