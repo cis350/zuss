@@ -20,8 +20,10 @@ Everyone will have to set up their own environment variables to store the databa
 - create a file called ".env" in the backend folder. Inside, paste 
 MONGODB_URI= and put the database connection string right after.
 - ***do not add any spaces or quotes or it won't work***
-
+- create another file called ".env.test" in the backend folder. Inside,
+paste MONGODB_URI= and put the TEST database connection string right after. 
 DATABASE LINK: https://cloud.mongodb.com/v2/65fca404d7189a29f502a442#/clusters/detail/zuss
+TEST DB LINK: https://cloud.mongodb.com/v2/660de870379ae33d00c65daa#/clusters/detail/ZussTest
 - currently, login details (user and pass) is stored in the collection titled 'ProfileInfo'
 under the database titled 'FormInputs.' Under FormInputs, there is also a 'Clubs' collection
 to store event details. 
