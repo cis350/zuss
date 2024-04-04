@@ -1,10 +1,16 @@
 // load environment variable from .env file 
-require('dotenv').config();
+if (process.env.NODE_ENV === 'test') {
+    require('dotenv').config({ path: '.env.test' });
+  } else {
+    require('dotenv').config();
+  }
+  
 
 // set up mongoDB ... initialize mongodb client with URI 
 const { MongoClient } = require('mongodb');
 const dbName = 'FormInputs';
 const client = new MongoClient(process.env.MONGODB_URI);
+
 
 
 
@@ -81,6 +87,9 @@ async function fetchAccountData() {
 }
 
 
-
-
-module.exports = { connect, insertAccountData, fetchAccountData, client};
+async function close() {
+    await client.close();
+  }
+  
+  module.exports = { connect, insertAccountData, fetchAccountData, client, close };
+  

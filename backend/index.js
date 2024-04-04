@@ -1,5 +1,9 @@
-// use direct mongoDB not mongoose 
-require('dotenv').config();
+
+if (process.env.NODE_ENV === 'test') {
+  require('dotenv').config({ path: '.env.test' });
+} else {
+  require('dotenv').config();
+}
 
 const express = require('express');
 const path = require('path');
@@ -11,15 +15,13 @@ app.use(express.json()); //access request body as json
 
 // use cors middleware to allow frontend to communicate with backend
 const cors = require('cors');
-// The "catchall" handler: for any request that doesn't
-// match one above, send back React's index.html file.
-
-
 const corsOptions = {
   origin: 'http://localhost:3000', 
 };
 
 app.use(cors(corsOptions));
+//app.use(cors());
+
 
 // utilize cookieSession to keep track of whether user logged in or logged out 
 //app.use(cookieSession({
@@ -89,12 +91,11 @@ app.post('/login', async(req, res) => {
 //tester endpoint, feel free to delete
 app.get('/accounts-data', async (_req, res) => {
   try {
-    await database.insertAccountData('u', 'pass'); 
     const data = await database.fetchAccountData(); 
     res.json(data);
   } catch (error) {
     console.error('Error inserting sample data:', error);
-    res.status(500).send('Failed to insert sample data.');
+    res.status(500).send('Failed to insert sample data', error);
   }
 });
 
@@ -106,33 +107,12 @@ app.get('*', (req, res) => {
 
 
 
-const port = 8000; 
-const server = app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
+module.exports = app;
 
 
 
 
-process.on('SIGINT', async () => {
-  console.log('Closing database connection...');
-  await database.client.close();
-  server.close(() => {
-    console.log('HTTP server closed');
-});
-});
-
-process.on('SIGTERM', async () => {
-  console.log('SIGTERM signal received: closing MongoDB connection');
-  await database.client.close(); // Assuming 'client' is exported from your database module
-  server.close(() => {
-      console.log('HTTP server closed');
-  });
-});
 
 
 
-// test sign up adds user
-// curl -X POST http://localhost:4000/sign-up \
-// -H "Content-Type: application/json" \
-// -d '{"username": "testUser", "password": "testPass"}'
+

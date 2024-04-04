@@ -1,56 +1,54 @@
+/* eslint-disable no-undef */
 // contains test cases for index.js endpoints
+const request = require('supertest'); //make HTTP request without starting the server
+const app = require('./index.js');
 
-const backend = require('./index.js');
+const database = require('./database');
+
+
 
 
 /**
  * Test the login endpoint
  */
-test('Test the login endpoint', async () => {
-  const req = {
-    body: {
-      username: 'lil_aashy',
-      password: 'macaroon'
-    }
-  };
+describe('login', () => {
+  afterAll(async () => {
+    await database.client.close(); // Close the MongoDB connection
+  });
+  it('success with existing user', async () => {
+    const response = await request(app)
+      .post('/login')
+      .send({
+        username: 'lil_emily',
+        password: 'scone'
+      });
 
-  const res = {
-    status: jest.fn(() => res),
-    send: jest.fn()
-  };
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual({ message: "User successfully logged in." });
+  });
 
-  await backend.login(req, res);
-
-  expect(res.status).toHaveBeenCalledTimes(1);
-  expect(res.status).toHaveBeenCalledWith(200);
-  expect(res.send).toHaveBeenCalledTimes(1);
-  expect(res.send).toHaveBeenCalledWith({message: "User successfully logged in."});
+  
 });
 
 
 /**
  * Test the registration
  */
-test('Test the registration endpoint', async () => {
-  const req = {
-    body: {
-      username: 'lil_emily',
-      password: 'scone'
-    }
-  };
+describe('sign up', () => {
+  afterAll(async () => {
+    await database.client.close(); // Close the MongoDB connection
+  });
+  it('register a new user', async () => {
+   
+    const randomValue = Math.floor(Math.random() * 10000); 
+    const username = `test_user_${randomValue}`;
+    const password = `test_pass_${randomValue}`;
 
-  let sentMessage = '';
-  const res = {
-    status: jest.fn(() => res),
-    send: jest.fn((message) => {
-      sentMessage = message;
-    })
-  };
+    const response = await request(app)
+      .post('/sign-up')
+      .send({ username, password });
 
-  await backend.signUp(req, res);
-
-  expect(res.status).toHaveBeenCalledTimes(1);
-  expect(res.status).toHaveBeenCalledWith(200);
-  expect(sentMessage).toEqual('Successfully registered user.');
-  
+    expect(response.statusCode).toBe(200);
+    expect(response.text).toEqual('Successfully registered user.');
+  });
 });
