@@ -31,6 +31,7 @@ function Homepage() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    localStorage.removeItem('token');
     navigate('/');
   };
 
