@@ -13,6 +13,12 @@
   }
 }
 
+.zussImage {
+  width: 50%;
+  height: auto;
+  object-fit: cover;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
