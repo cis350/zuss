@@ -1,4 +1,3 @@
-
 if (process.env.NODE_ENV === 'test') {
   require('dotenv').config({ path: '.env.test' });
 } else {
@@ -8,7 +7,7 @@ if (process.env.NODE_ENV === 'test') {
 const express = require('express');
 const path = require('path');
 const database = require('./database');
-//const cookieSession = require('cookie-session');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 app.use(express.json()); //access request body as json
@@ -20,32 +19,16 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-//app.use(cors());
 
 
-// utilize cookieSession to keep track of whether user logged in or logged out 
-//app.use(cookieSession({
-  //name: 'session',
-  //keys: ['secretkey1', 'secretkey2'], 
-  //maxAge: 24 * 60 * 60 * 1000 
-//}));
-
-
-//TODO: create post endpoint called '/create-account' that inserts the
-//user and password into the db using insertAccountData
-
-// create signup route, take in a request and response 
-// need to add next for error handling 
-// should be post HTTP because placing in database 
 app.post('/sign-up', async (req, res) => {
   const {username, password} = req.body; 
   try {
-    // try to insert the data aka process adding in an account with 
-    // specified username and password  
     await database.insertAccountData(username, password); 
-
-    // indicate that you successfully registered the user 
-    res.status(200).send("Successfully registered user.")
+    const payload = { username };
+    const secretKey = process.env.JWT_SECRET_KEY || 'secret';
+    const token = jwt.sign(payload, secretKey, { expiresIn: '1h' });
+    return res.status(200).json({ token, message: "Successfully registered user." })
   } catch (error) {
     // if error inserting data, send 500 level error code 
     if (error.message === 'Username already exists') {
@@ -55,9 +38,6 @@ app.post('/sign-up', async (req, res) => {
     return res.status(500).send('Failed to insert data.');
   }
 });
-
-//TODO: create post endpoint called '/login' that queries the db to 
-//verify the user and pass are in the db, returning success if so
 
 app.post('/login', async(req, res) => {
   const {username, password} = req.body; 
@@ -69,20 +49,20 @@ app.post('/login', async(req, res) => {
   const user = allData.find(u => u.username === username && u.password === password);
 
   if (!user) { 
-    // if we can't return a matching object, means password is incorrect
-    res.status(500).send({message: "Invalid username or password."})
+    return res.status(401).send({message: "Invalid username or password."})
   }
 
-  // if we successfully retrieve matching user and other status messages
-  // haven't run already, that means we can successfully log in 
-  // log in by updating user session to store name of logged in user 
-  //req.session.user = {id: user._id.toString(), username: user.username};
-  res.status(200).send({message: "User successfully logged in."});
+  const payload = { username: user.username };
+  const secretKey = process.env.JWT_SECRET_KEY || 'secret';
+  const token = jwt.sign(payload, secretKey, { expiresIn: '1h' });
+
+  return res.status(200).send({token, message: "User successfully logged in."});
   
-  // catch any errors 
   } catch (error) {
   console.error('Login error:', error);
-  res.status(500).send({message: "Login failed."});
+  if (!res.headersSent) {
+    return res.status(500).send({ message: "Login failed." }); 
+  }
   }
 })
 

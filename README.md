@@ -18,7 +18,8 @@ to run the  app: run npm start in the root directory
 *ENVIRONMENT VARIABLES - important!
 Everyone will have to set up their own environment variables to store the database credentials.
 - create a file called ".env" in the backend folder. Inside, paste 
-MONGODB_URI= and put the database connection string right after.
+MONGODB_URI= and put the database connection string right after. Also paste
+JWT_SECRET_KEY= and put the secret key after. 
 - ***do not add any spaces or quotes or it won't work***
 - create another file called ".env.test" in the backend folder. Inside,
 paste MONGODB_URI= and put the TEST database connection string right after. 

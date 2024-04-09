@@ -26,17 +26,20 @@ const Login = () => {
         
         const response = await fetch(url, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {'Content-Type': 'application/json' },
             body: JSON.stringify(userInfo),
         });
         if (response.ok) {
           console.log(url.length);
-            console.log('Success:', await response.text());
-            navigate('/homepage');
+          const data = await response.json();
+          localStorage.setItem('token', data.token);
+          console.log('Success:', data);
+          navigate('/homepage');
          
           } else {
-            setErrorMessage('Failed: ${response.statusText}');
-            console.error('Failed:', response.statusText);
+            const errorMessage = await response.text();
+           setErrorMessage(`Failed: ${errorMessage}`);
+            console.error('Failed:', errorMessage);
           }
         } catch (error) {
           console.error('Error:', error);
