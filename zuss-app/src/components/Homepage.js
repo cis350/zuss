@@ -1,7 +1,10 @@
 import React from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Box} from '@mui/material';
 import { styled } from '@mui/system';
+import { DataGrid } from '@mui/x-data-grid';
+const config = require('../config.json');
 
 const StyledAppBar = styled(AppBar)({
   backgroundColor: '#123456', 
@@ -29,6 +32,24 @@ const ContentBox = styled(Box)(({ theme }) => ({
 
 function Homepage() {
   const navigate = useNavigate();
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    //`http://${config.server_host}:${config.server_port}/events-data`
+    fetch(`http://localhost:8000/events-data`)
+      .then(res => res.json())
+      .then(resJson => {
+        console.log("resJson");
+        console.log(resJson);
+        const events = resJson.map((event) => ({ id: event.eventName, ...event.clubName }));
+        setData(events);
+      });
+  }, []);
+
+  const columns = [
+    { field: 'eventName', headerName: 'Event', width: 300, },
+    { field: 'clubName', headerName: 'Organization', width: 200,}
+  ]
 
   const handleLogout = () => {
     navigate('/');
@@ -58,6 +79,12 @@ function Homepage() {
           Upcoming Events
         </Typography>
         {/* map over events */}
+        <DataGrid
+          rows={data}
+          columns={columns}
+          rowsPerPageOptions={[5, 10, 25]}
+          autoHeight
+        />
       </ContentBox>
     </Box>
   );

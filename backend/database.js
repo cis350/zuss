@@ -87,9 +87,24 @@ async function fetchAccountData() {
 }
 
 
+async function fetchEventData() {
+    const db = await connect();
+    const collection = db.collection('Clubs');
+
+    try {
+        console.log("fetchEventData");
+        const data = await collection.find({}).toArray();
+        console.log("data", data)
+        return data;
+    } catch (error) {
+        throw new Error(error);
+    }
+
+}
+
 async function close() {
     await client.close();
   }
   
-  module.exports = { connect, insertAccountData, fetchAccountData, client, close };
+  module.exports = { connect, insertAccountData, fetchAccountData, fetchEventData ,client, close };
   

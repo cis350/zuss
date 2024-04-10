@@ -18,10 +18,11 @@
   "homepage": "https://github.com/cis350/zuss#readme",
   "dependencies": {
     "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.0",
+    "@emotion/styled": "^11.11.5",
     "@fontsource/roboto": "^5.0.12",
     "@mui/icons-material": "^5.15.14",
-    "@mui/material": "^5.15.14",
+    "@mui/material": "^5.15.15",
+    "@mui/x-data-grid": "^7.1.0",
     "cookie-session": "^2.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -37,7 +38,8 @@
     "concurrently": "^8.2.2",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.1",
-    "netlify-cli": "^17.21.1"
+    "netlify-cli": "^17.21.1",
+    "shx": "^0.3.4"
   },
   "keywords": [],
   "description": ""

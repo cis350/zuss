@@ -87,6 +87,18 @@ app.post('/login', async(req, res) => {
 })
 
 
+app.get('/events-data', async (_req, res) => {
+  try {
+    const data = await database.fetchEventData(); 
+    console.log("successfully got the data");
+    console.log('data:', data);
+    res.json(data);
+  } catch (error) {
+    console.error('Error receiving sample data:', error);
+    res.status(500).send('Failed to receive sample data', error);
+  }
+});
+
 
 //tester endpoint, feel free to delete
 app.get('/accounts-data', async (_req, res) => {
@@ -105,6 +117,12 @@ app.get('*', (req, res) => {
 });
 
 
+
+
+app.use(express.static(path.join(__dirname, '../zuss-app/build')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../zuss-app/build/index.html'));
+});
 
 
 module.exports = app;
