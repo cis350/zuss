@@ -1,6 +1,6 @@
 /* eslint-disable no-template-curly-in-string */
 import React, { useState } from 'react';
-import { Button, Typography, Grid, Paper, TextField } from '@mui/material';
+import { Button, Typography, Grid, Paper, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import zussLogo from '../zussLogo.png';
 import Box from '@mui/material/Box';
@@ -11,7 +11,12 @@ const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [openDialog, setOpenDialog] = useState(false);
 
+    const handleCloseDialog = () => {
+      setOpenDialog(false);
+      setErrorMessage('');
+    };
   
     const handleSubmit = async (e) => {
       e.preventDefault();
@@ -36,19 +41,22 @@ const Login = () => {
           navigate('/homepage');
          
           } else {
-            const errorMessage = await response.text();
-           setErrorMessage(`Failed: ${errorMessage}`);
+            const errorMessage = await response.json();
+           setErrorMessage(`Failed: ${errorMessage.message}`);
+           setOpenDialog(true);
             console.error('Failed:', errorMessage);
           }
         } catch (error) {
           console.error('Error:', error);
-          setErrorMessage(`Error: ${error.message}`);
+           setErrorMessage(`Failed: ${errorMessage}`);
+          setOpenDialog(true);
         }
   
         console.log("isLogin:", isLogin, "Credentials:", userInfo, "URL:", url);
     };
   
     return (
+      <> 
       <Grid container style={{ minHeight: '100vh' }}>
    
    <Grid item xs={12} sm={6} style={{ backgroundColor: '#11468F', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -114,6 +122,27 @@ const Login = () => {
         </Box>
       </Grid>
       </Grid>
+       {errorMessage && (
+        <Dialog
+          open={openDialog}
+          onClose={handleCloseDialog}
+          aria-labelledby="error-dialog-title"
+          aria-describedby="error-dialog-description"
+        >
+          <DialogTitle id="error-dialog-title">{"Error"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="error-dialog-description">
+              {errorMessage}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseDialog} color="primary" autoFocus>
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
+      </>
     );
 };
 
