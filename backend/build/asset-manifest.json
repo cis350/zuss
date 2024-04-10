@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/static/css/main.f855e6bc.css",
-    "main.js": "/static/js/main.de190f24.js",
+    "main.css": "/static/css/main.787b7e2b.css",
+    "main.js": "/static/js/main.da891900.js",
     "static/js/453.e05813ce.chunk.js": "/static/js/453.e05813ce.chunk.js",
     "static/media/zussLogo.png": "/static/media/zussLogo.9488ce90bbfe99061147.png",
     "index.html": "/index.html",
-    "main.f855e6bc.css.map": "/static/css/main.f855e6bc.css.map",
-    "main.de190f24.js.map": "/static/js/main.de190f24.js.map",
+    "main.787b7e2b.css.map": "/static/css/main.787b7e2b.css.map",
+    "main.da891900.js.map": "/static/js/main.da891900.js.map",
     "453.e05813ce.chunk.js.map": "/static/js/453.e05813ce.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.f855e6bc.css",
-    "static/js/main.de190f24.js"
+    "static/css/main.787b7e2b.css",
+    "static/js/main.da891900.js"
   ]
 }

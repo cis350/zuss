@@ -22,7 +22,7 @@ describe('login', () => {
         username: 'lil_emily',
         password: 'scone'
       });
-
+    
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual({ message: "User successfully logged in." });
   });
