@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"npm run start --prefix backend\" \"npm run start --prefix zuss-app\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_ENV=test jest",
+    "start": "cd ../zuss-app && npm run build && cd ../backend && node server.js"
   },
   "repository": {
     "type": "git",
