@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test jest",
-    "start": "cd ../zuss-app && npm run build && cd ../backend && node server.js"
+    "start": "node index.js",
+    "test": "jest --coverage --runInBand"
   },
   "repository": {
     "type": "git",
