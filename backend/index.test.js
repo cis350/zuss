@@ -2,7 +2,7 @@
 // contains test cases for index.js endpoints
 //const request = require('supertest'); //make HTTP request without starting the server
 const app = require('./index.js');
-
+const request = require('supertest');
 const database = require('./database');
 
 
@@ -23,9 +23,28 @@ describe('login', () => {
         password: 'scone'
       });
     
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toEqual({ message: "User successfully logged in." });
+      expect(response.statusCode).toBe(200);
+      expect(response.body.message).toEqual("User successfully logged in.");
+      expect(response.body.token).toBeDefined();      
   });
+  it('reject login with invalid username', async () => {
+    const response = await request(app)
+      .post('/login')
+      .send({ username: 'blah', password: 'lol' });
+
+    expect(response.statusCode).toBe(401);
+    expect(response.body.message).toEqual("Invalid username or password.");
+  });
+  it('reject login with invalid pass', async () => {
+
+    const response = await request(app)
+      .post('/login')
+      .send({ username: 'emily', password: 'haha' });
+
+    expect(response.statusCode).toBe(401);
+    expect(response.body.message).toEqual("Invalid username or password.");
+  });
+
 
   
 });
@@ -48,7 +67,20 @@ describe('sign up', () => {
       .post('/sign-up')
       .send({ username, password });
 
-    expect(response.statusCode).toBe(200);
-    expect(response.text).toEqual('Successfully registered user.');
+      const responseBody = JSON.parse(response.text);
+      expect(response.statusCode).toBe(200);
+      expect(responseBody.message).toEqual("Successfully registered user.");
+      expect(responseBody.token).toBeDefined();
+      
+  });
+
+  it('reject existing username', async () => {
+  
+
+    const response = await request(app)
+      .post('/sign-up')
+      .send({ username: 'lil_emily', password: 'lol' });
+    expect(response.statusCode).toBe(400);
+    expect(response.text).toEqual("Username already exists.");
   });
 });
