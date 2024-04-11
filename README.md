@@ -22,7 +22,9 @@ MONGODB_URI= and put the database connection string right after. Also paste
 JWT_SECRET_KEY= and put the secret key after. 
 - ***do not add any spaces or quotes or it won't work***
 - create another file called ".env.test" in the backend folder. Inside,
-paste MONGODB_URI= and put the TEST database connection string right after. 
+paste MONGODB_URI= and put the TEST database connection string right after. Also paste
+TEST_USERNAME=lil_emily
+TEST_PASSWORD=scone
 DATABASE LINK: https://cloud.mongodb.com/v2/65fca404d7189a29f502a442#/clusters/detail/zuss
 TEST DB LINK: https://cloud.mongodb.com/v2/660de870379ae33d00c65daa#/clusters/detail/ZussTest
 - currently, login details (user and pass) is stored in the collection titled 'ProfileInfo'
