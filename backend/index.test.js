@@ -5,7 +5,8 @@ const app = require('./index.js');
 const request = require('supertest');
 const database = require('./database');
 
-
+const testUsername = process.env.TEST_USERNAME;
+const testPassword = process.env.TEST_PASSWORD;
 
 
 /**
@@ -19,8 +20,8 @@ describe('login', () => {
     const response = await request(app)
       .post('/login')
       .send({
-        username: 'lil_emily',
-        password: 'scone'
+        username: testUsername,
+        password: testPassword
       });
     
       expect(response.statusCode).toBe(200);
@@ -28,18 +29,19 @@ describe('login', () => {
       expect(response.body.token).toBeDefined();      
   });
   it('reject login with invalid username', async () => {
+    const randomValue = Math.floor(Math.random() * 10000); 
     const response = await request(app)
       .post('/login')
-      .send({ username: 'blah', password: 'lol' });
+      .send({ username: randomValue, password: randomValue });
 
     expect(response.statusCode).toBe(401);
     expect(response.body.message).toEqual("Invalid username or password.");
   });
   it('reject login with invalid pass', async () => {
-
+    const randomValue = Math.floor(Math.random() * 10000); 
     const response = await request(app)
       .post('/login')
-      .send({ username: 'emily', password: 'haha' });
+      .send({ username: testUsername, password: randomValue });
 
     expect(response.statusCode).toBe(401);
     expect(response.body.message).toEqual("Invalid username or password.");
@@ -75,11 +77,11 @@ describe('sign up', () => {
   });
 
   it('reject existing username', async () => {
-  
+    const randomValue = Math.floor(Math.random() * 10000); 
 
     const response = await request(app)
       .post('/sign-up')
-      .send({ username: 'lil_emily', password: 'lol' });
+      .send({ username: testUsername, password: randomValue });
     expect(response.statusCode).toBe(400);
     expect(response.text).toEqual("Username already exists.");
   });
