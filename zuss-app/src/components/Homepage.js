@@ -30,19 +30,28 @@ const ContentBox = styled(Box)(({ theme }) => ({
   minHeight: '100vh',
 }));
 
-function Homepage() {
+function Homepage () {
   const navigate = useNavigate();
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([{clubName:'WUEC', eventName:'Hackathon'}]);
+  console.log("starting");
 
   useEffect(() => {
+    console.log("fetching data");
     //`http://${config.server_host}:${config.server_port}/events-data`
-    fetch(`http://localhost:8000/events-data`)
-      .then(res => res.json())
+    fetch(`http://localhost:3000/events-data`)
+      .then(res => {
+        console.log("first then");
+        console.log(res);
+        res.json();})
       .then(resJson => {
         console.log("resJson");
         console.log(resJson);
         const events = resJson.map((event) => ({ id: event.eventName, ...event.clubName }));
         setData(events);
+        // const events = resJson.map(event => ({ id: event.eventName, ...event }));
+        // setData(events);
+      }).catch(error => {
+        console.log('Error fetching data:', error);
       });
   }, []);
 
@@ -52,6 +61,7 @@ function Homepage() {
   ]
 
   const handleLogout = () => {
+    localStorage.removeItem('token');
     navigate('/');
   };
 
@@ -79,15 +89,15 @@ function Homepage() {
           Upcoming Events
         </Typography>
         {/* map over events */}
-        <DataGrid
+        {/* <DataGrid
           rows={data}
           columns={columns}
           rowsPerPageOptions={[5, 10, 25]}
           autoHeight
-        />
+        /> */}
       </ContentBox>
     </Box>
   );
-}
+};
 
 export default Homepage;

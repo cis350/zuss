@@ -1,10 +1,9 @@
 /* eslint-disable no-template-curly-in-string */
 import React, { useState } from 'react';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import TextField from '@mui/material/TextField';
+import { Button, Typography, Grid, Paper, TextField } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import zussLogo from '../zussLogo.png';
+import Box from '@mui/material/Box';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -25,17 +24,20 @@ const Login = () => {
         
         const response = await fetch(url, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {'Content-Type': 'application/json' },
             body: JSON.stringify(userInfo),
         });
         if (response.ok) {
           console.log(url.length);
-            console.log('Success:', await response.text());
-            navigate('/homepage');
+          const data = await response.json();
+          localStorage.setItem('token', data.token);
+          console.log('Success:', data);
+          navigate('/homepage');
          
           } else {
-            setErrorMessage('Failed: ${response.statusText}');
-            console.error('Failed:', response.statusText);
+            const errorMessage = await response.text();
+           setErrorMessage(`Failed: ${errorMessage}`);
+            console.error('Failed:', errorMessage);
           }
         } catch (error) {
           console.error('Error:', error);
@@ -46,54 +48,74 @@ const Login = () => {
     };
   
     return (
-      <Container component="main" maxWidth="xs">
-        <Typography component="h1" variant="h5">
-          {isLogin ? 'Login' : 'Create Account'}
-        </Typography>
-        <form onSubmit={handleSubmit}>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            label="Username"
-            name="username"
-            autoComplete="username"
-            autoFocus
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-          >
+      <Grid container style={{ minHeight: '100vh' }}>
+   
+   <Grid item xs={12} sm={6} style={{ backgroundColor: '#11468F', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <img src={zussLogo} alt="Calendar" style={{ maxWidth: '50%', maxHeight: '50%' }} />
+      </Grid>
+  
+   
+      <Grid item xs={12} sm={6} style={{ backgroundColor: '#041562', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+      <Box style={{ margin: 'auto', padding: 20, maxWidth: 400, width: '100%' }}>
+      <Typography component="h1" variant="h5" gutterBottom style={{ color: '#FFFFFF', textAlign: 'center', marginBottom: 20 }}>
+            Welcome to Zusammen!
+          </Typography>
+        <Paper elevation={6} style={{ margin: 'auto', padding: 20, maxWidth: 400 }}>
+          <Typography component="h2" variant="h5" style={{ textAlign: 'center' }}>
             {isLogin ? 'Login' : 'Create Account'}
-          </Button>
-          <Button
-            fullWidth
-            variant="text"
-            onClick={() => setIsLogin(!isLogin)}
-          >
-            {isLogin ? 'No account? Create one' : 'Already have an account? Login'}
-          </Button>
-          {errorMessage && <div style={{ color: 'red', marginTop: '10px' }}>{errorMessage}</div>}
-        </form>
-      </Container>
+          </Typography>
+          <form onSubmit={handleSubmit} style={{ marginTop: 8 }}>
+          <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                label="Username"
+                name="username"
+                autoComplete="username"
+                autoFocus
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                style={{ marginTop: 16, marginBottom: 8 }}
+              >
+                {isLogin ? 'Sign In' : 'Sign Up'}
+              </Button>
+              <Button
+                fullWidth
+                variant="text"
+                onClick={() => setIsLogin(!isLogin)}
+              >
+                {isLogin ? 'No account? Create one' : 'Already have an account? Sign in'}
+              </Button>
+              {errorMessage && <Typography color="error" style={{ marginTop: 8 }}>{errorMessage}</Typography>}
+          </form>
+          {errorMessage && <Typography color="error" style={{ marginTop: 8 }}>{errorMessage}</Typography>}
+          
+        </Paper>
+        </Box>
+      </Grid>
+      </Grid>
     );
 };
 
 export default Login;
+
+
