@@ -4,7 +4,7 @@
   "main": "index.js",
 
   "scripts": {
-    "start": "npm run start --prefix zuss-app && npm run start --prefix backend",
+    "start": "concurrently \"npm run start --prefix backend\" \"npm run start --prefix zuss-app\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
