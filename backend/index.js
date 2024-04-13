@@ -28,7 +28,7 @@ app.post('/sign-up', async (req, res) => {
     const payload = { username };
     const secretKey = process.env.JWT_SECRET_KEY || 'secret';
     const token = jwt.sign(payload, secretKey, { expiresIn: '1h' });
-    return res.status(200).json({ token, message: "Successfully registered user." })
+    return res.status(201).json({ token, message: "Successfully registered user." })
   } catch (error) {
     // if error inserting data, send 500 level error code 
     if (error.message === 'Username already exists') {
