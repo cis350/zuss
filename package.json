@@ -2,7 +2,6 @@
   "name": "zuss-1",
   "version": "1.0.0",
   "main": "index.js",
-
   "scripts": {
     "start": "concurrently \"npm run start --prefix backend\" \"npm run start --prefix zuss-app\"",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -32,12 +31,12 @@
     "mongoose": "^8.2.4",
     "nodemon": "^3.1.0",
     "react-scripts": "^5.0.1",
-    "web-vitals": "^3.5.2"
+    "web-vitals": "^3.5.2",
+    "concurrently": "^8.2.2"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^7.3.1",
     "@typescript-eslint/parser": "^7.3.1",
-    "concurrently": "^8.2.2",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.1",
     "netlify-cli": "^17.21.1",
