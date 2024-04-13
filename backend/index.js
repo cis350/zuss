@@ -4,6 +4,12 @@ if (process.env.NODE_ENV === 'test') {
   require('dotenv').config();
 }
 
+// const port = process.env.PORT || 3000;
+// // start the web server
+// webapp.listen(port, () =>{
+//   console.log('Server running on port', port);
+// })
+
 const express = require('express');
 const path = require('path');
 const database = require('./database');
@@ -96,9 +102,6 @@ app.use(express.static(path.join(__dirname, '../zuss-app/build')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../zuss-app/build/index.html'));
 });
-
-
-
 
 app.use(express.static(path.join(__dirname, '../zuss-app/build')));
 app.get('*', (req, res) => {

@@ -9,8 +9,9 @@ if (process.env.NODE_ENV === 'test') {
 // set up mongoDB ... initialize mongodb client with URI 
 const { MongoClient } = require('mongodb');
 const dbName = 'FormInputs';
+console.log("lalala");
 const client = new MongoClient(process.env.MONGODB_URI);
-
+console.log("ya it works");
 
 
 
