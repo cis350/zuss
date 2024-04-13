@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test jest",
-    "start": "cd npm run build && cd ../backend && node server.js"
+    "start": "npm run build && cd ../backend && node server.js"
   },
   "author": "",
   "license": "ISC",
