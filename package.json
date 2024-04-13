@@ -23,6 +23,7 @@
     "@mui/icons-material": "^5.15.14",
     "@mui/material": "^5.15.15",
     "@mui/x-data-grid": "^7.1.0",
+    "concurrently": "^8.2.2",
     "cookie-session": "^2.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -30,9 +31,9 @@
     "mongodb": "^6.5.0",
     "mongoose": "^8.2.4",
     "nodemon": "^3.1.0",
+    "react-router-dom": "^6.22.3",
     "react-scripts": "^5.0.1",
-    "web-vitals": "^3.5.2",
-    "concurrently": "^8.2.2"
+    "web-vitals": "^3.5.2"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^7.3.1",
