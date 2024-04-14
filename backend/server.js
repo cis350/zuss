@@ -6,7 +6,7 @@ const server = app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
 
-
+/*
 process.on('SIGINT', async () => {
     console.log('Closing database connection...');
     await database.client.close();
@@ -22,3 +22,4 @@ process.on('SIGINT', async () => {
         console.log('HTTP server closed');
     });
   });
+  */
