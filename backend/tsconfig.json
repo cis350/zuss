@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+      "target": "es6",         
+      "module": "commonjs",    
+      "strict": true,           
+      "esModuleInterop": true, 
+      "skipLibCheck": true,    
+      "forceConsistentCasingInFileNames": true,
+      "outDir": "./dist"        
+    },
+    "include": [
+      "./database.js",
+      "./index.js",
+      "./server.js"       
+    ],
+    "exclude": [
+        "node_modules",
+        ".eslintrc.js"        
+    ]
+  }
+  
