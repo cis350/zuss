@@ -92,6 +92,7 @@ app.get('/accounts-data', async (_req, res) => {
   }
 });
 
+/*
 app.use(express.static(path.join(__dirname, '../zuss-app/build')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../zuss-app/build/index.html'));
@@ -107,7 +108,16 @@ app.get('*', (req, res) => {
 
 
 module.exports = app;
+*/
 
+// import the express app
+const webapp = require('./server');
+
+const port = 8080;
+// start the web server
+webapp.listen(port, () =>{
+    console.log('Server running on port', port);
+})
 
 
 
