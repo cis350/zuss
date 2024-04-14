@@ -4,10 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+
     "test": "NODE_ENV=test jest --coverage",
     "lint": "eslint ./**/*.js ./**/*.jsx",
     "lint:fix": "eslint . --ext .js,.jsx --fix",
-    "start": "cd ../zuss-app && npm run build && cd ../backend && node server.js"
+    "start": "node server.js"
+
   },
   "eslintIgnore": ["./node_modules/"], 
   "jest": {
@@ -25,6 +27,7 @@
   "dependencies": {
     "concurrently": "^8.2.2",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-jwt": "^8.4.1",
     "jsonwebtoken": "^9.0.2",

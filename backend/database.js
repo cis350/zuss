@@ -87,9 +87,28 @@ async function fetchAccountData() {
 }
 
 
+async function fetchEventData() {
+    const db = await connect();
+    const collection = db.collection('Clubs');
+    console.log("fetchEventData");
+
+    try {
+        // console.log("fetchEventData");
+        // const data = await collection.find({}).toArray();
+        temp_data = [{clubName:'WUEC', eventName:'Hackathon'}];
+        console.log("data", temp_data)
+        return temp_data;
+    } catch (error) {
+        console.log("womp womp");
+        console.log(error);
+        throw new Error(error);
+    }
+
+}
+
 async function close() {
     await client.close();
   }
   
-  module.exports = { connect, insertAccountData, fetchAccountData, client, close };
+  module.exports = { connect, insertAccountData, fetchAccountData, fetchEventData ,client, close };
   

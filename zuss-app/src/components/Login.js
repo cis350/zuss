@@ -24,7 +24,6 @@ const Login = () => {
       console.log(isLogin);
       const endpoint = isLogin ? '/login' : '/sign-up';
       const url = `http://localhost:8000${endpoint}`;
-      
 
       try {
         
