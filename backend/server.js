@@ -8,6 +8,7 @@ const express = require('express');
 const path = require('path');
 const database = require('./database');
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
 
 const app = express();
 //app.use(express.json()); //access request body as json
@@ -15,7 +16,7 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 
 // use cors middleware to allow frontend to communicate with backend
-const cors = require('cors');
+
 const corsOptions = {
   origin: 'http://localhost:3000', 
 };
@@ -23,11 +24,12 @@ const corsOptions = {
 //app.use(cors(corsOptions));
 app.use(cors);
 
+/*
 // root endpoint route
 app.get('/', (_req, resp) => {
   resp.json({ message: 'hello, deployment is active' });
 });
-
+*/
 
 app.post('/sign-up', async (req, res) => {
   const {username, password} = req.body; 
