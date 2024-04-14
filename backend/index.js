@@ -20,7 +20,8 @@ const corsOptions = {
   origin: 'http://localhost:3000', 
 };
 
-app.use(cors(corsOptions));
+//app.use(cors(corsOptions));
+app.use(cors);
 
 
 app.post('/sign-up', async (req, res) => {
@@ -68,7 +69,7 @@ app.post('/login', async(req, res) => {
   }
 })
 
-
+/*
 app.get('/events-data', async (_req, res) => {
   console.log("/events-data");
   try {
@@ -81,6 +82,7 @@ app.get('/events-data', async (_req, res) => {
     res.status(500).send('Failed to receive sample data', error);
   }
 });
+*/
 
 
 //tester endpoint, feel free to delete
