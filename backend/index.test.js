@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 // contains test cases for index.js endpoints
 //const request = require('supertest'); //make HTTP request without starting the server
-const app = require('./index.js');
+const app = require('./server.js');
 const request = require('supertest');
 const database = require('./database');
 
