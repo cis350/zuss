@@ -24,12 +24,12 @@ const corsOptions = {
 //app.use(cors(corsOptions));
 app.use(cors);
 
-/*
+
 // root endpoint route
 app.get('/', (_req, resp) => {
   resp.json({ message: 'hello, deployment is active' });
 });
-*/
+
 
 app.post('/sign-up', async (req, res) => {
   const {username, password} = req.body; 
