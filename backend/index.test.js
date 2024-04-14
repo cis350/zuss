@@ -70,7 +70,7 @@ describe('sign up', () => {
       .send({ username, password });
 
       const responseBody = JSON.parse(response.text);
-      expect(response.statusCode).toBe(200);
+      expect(response.statusCode).toBe(201);
       expect(responseBody.message).toEqual("Successfully registered user.");
       expect(responseBody.token).toBeDefined();
       
