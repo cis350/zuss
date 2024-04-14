@@ -10,7 +10,9 @@ const database = require('./database');
 const jwt = require('jsonwebtoken');
 
 const app = express();
-app.use(express.json()); //access request body as json
+//app.use(express.json()); //access request body as json
+
+app.use(express.urlencoded({ extended: true }));
 
 // use cors middleware to allow frontend to communicate with backend
 const cors = require('cors');
@@ -110,12 +112,9 @@ app.get('*', (req, res) => {
 module.exports = app;
 */
 
-// import the express app
-const webapp = require('./server');
-
 const port = 8080;
 // start the web server
-webapp.listen(port, () =>{
+app.listen(port, () =>{
     console.log('Server running on port', port);
 })
 
