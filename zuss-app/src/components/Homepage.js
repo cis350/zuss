@@ -1,18 +1,20 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AppBar, Toolbar, Typography, Button, Box} from '@mui/material';
+import {
+  AppBar, Toolbar, Typography, Button, Box,
+} from '@mui/material';
 import { styled } from '@mui/system';
 import { DataGrid } from '@mui/x-data-grid';
+
 const config = require('../config.json');
 
 const StyledAppBar = styled(AppBar)({
-  backgroundColor: '#123456', 
+  backgroundColor: '#123456',
   color: 'white',
 });
 
 const StyledToolbar = styled(Toolbar)({
-  justifyContent: 'space-between', 
+  justifyContent: 'space-between',
 });
 
 const Title = styled(Typography)({
@@ -30,35 +32,36 @@ const ContentBox = styled(Box)(({ theme }) => ({
   minHeight: '100vh',
 }));
 
-function Homepage () {
+function Homepage() {
   const navigate = useNavigate();
-  const [data, setData] = useState([{clubName:'WUEC', eventName:'Hackathon'}]);
-  console.log("starting");
+  const [data, setData] = useState([{ clubName: 'WUEC', eventName: 'Hackathon' }]);
+  console.log('starting');
 
   useEffect(() => {
-    console.log("fetching data");
-    //`http://${config.server_host}:${config.server_port}/events-data`
-    fetch(`http://localhost:3000/events-data`)
-      .then(res => {
-        console.log("first then");
+    console.log('fetching data');
+    // `http://${config.server_host}:${config.server_port}/events-data`
+    fetch('http://localhost:3000/events-data')
+      .then((res) => {
+        console.log('first then');
         console.log(res);
-        res.json();})
-      .then(resJson => {
-        console.log("resJson");
+        res.json();
+      })
+      .then((resJson) => {
+        console.log('resJson');
         console.log(resJson);
         const events = resJson.map((event) => ({ id: event.eventName, ...event.clubName }));
         setData(events);
         // const events = resJson.map(event => ({ id: event.eventName, ...event }));
         // setData(events);
-      }).catch(error => {
+      }).catch((error) => {
         console.log('Error fetching data:', error);
       });
   }, []);
 
   const columns = [
-    { field: 'eventName', headerName: 'Event', width: 300, },
-    { field: 'clubName', headerName: 'Organization', width: 200,}
-  ]
+    { field: 'eventName', headerName: 'Event', width: 300 },
+    { field: 'clubName', headerName: 'Organization', width: 200 },
+  ];
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -98,6 +101,6 @@ function Homepage () {
       </ContentBox>
     </Box>
   );
-};
+}
 
 export default Homepage;

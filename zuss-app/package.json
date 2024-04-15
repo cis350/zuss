@@ -7,7 +7,6 @@
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.15.14",
-    "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "cors": "^2.8.5",
@@ -20,6 +19,7 @@
   "scripts": {
     "start": "react-scripts start",
     "test": "react-scripts test",
+    "lint": "eslint . --fix",
     "eject": "react-scripts eject",
     "build": "react-scripts build",
     "postbuild": "shx rm -rf ../backend/build && shx cp -r build ../backend/"
@@ -45,10 +45,14 @@
   "devDependencies": {
     "@csstools/postcss-color-function": "^3.0.12",
     "@csstools/postcss-progressive-custom-properties": "^3.1.1",
+    "@testing-library/jest-dom": "^6.4.2",
     "copyfiles": "^2.4.1",
     "eslint": "^8.57.0",
     "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
     "eslint-plugin-react": "^7.34.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "nodemon": "^3.1.0",
     "shx": "^0.3.4"
   }

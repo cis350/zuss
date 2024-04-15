@@ -33,6 +33,11 @@ app.get('/', (_req, resp) => {
 
 app.post('/sign-up', async (req, res) => {
   const {username, password} = req.body; 
+
+  if (!username || !password) {
+    return res.status(400).json({ message: "Username and password are required." });
+  }
+
   try {
     await database.insertAccountData(username, password); 
     const payload = { username };
@@ -51,6 +56,10 @@ app.post('/sign-up', async (req, res) => {
 
 app.post('/login', async(req, res) => {
   const {username, password} = req.body; 
+
+  if (!username || !password) {
+    return res.status(400).json({ message: "Username and password are required." });
+  }
 
   try { 
   let allData = await database.fetchAccountData();

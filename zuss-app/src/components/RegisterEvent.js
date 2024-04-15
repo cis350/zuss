@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AppBar, Toolbar, Typography, Button, Box, Container, TextField, Select, MenuItem, InputLabel } from '@mui/material';
+import {
+  AppBar, Toolbar, Typography, Button, Box, Container, TextField, Select, MenuItem, InputLabel,
+} from '@mui/material';
 import { styled } from '@mui/system';
 
 const StyledAppBar = styled(AppBar)({
-  backgroundColor: '#123456', 
+  backgroundColor: '#123456',
   color: 'white',
 });
 
 const StyledToolbar = styled(Toolbar)({
-  justifyContent: 'space-between', 
+  justifyContent: 'space-between',
 });
 
 const Title = styled(Typography)({
@@ -29,7 +31,7 @@ const ContentBox = styled(Box)(({ theme }) => ({
 
 function RegisterEvent() {
   const navigate = useNavigate();
-  const [isLogin, setIsLogin] = useState(true); 
+  const [isLogin, setIsLogin] = useState(true);
   const [eventName, setEventName] = useState('');
   const [eventDate, setEventDate] = useState('');
   const [organization, setOrganization] = useState('');
@@ -43,7 +45,7 @@ function RegisterEvent() {
     navigate('/homepage');
   };
 
-  const handleSubmit = async (e) => {}
+  const handleSubmit = async (e) => {};
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -64,55 +66,55 @@ function RegisterEvent() {
         {/* form to register event */}
 
         <Container component="main" maxWidth="xs">
-            <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5">
             Register your event here!
-            </Typography>
-            <form onSubmit={handleSubmit}>
+          </Typography>
+          <form onSubmit={handleSubmit}>
             <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                label="Event Name"
-                name="eventname"
-                autoComplete="event name"
-                autoFocus
-                value={eventName}
-                onChange={(e) => setEventName(e.target.value)}
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="Event Name"
+              name="eventname"
+              autoComplete="event name"
+              autoFocus
+              value={eventName}
+              onChange={(e) => setEventName(e.target.value)}
             />
             <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                name="date"
-                type="date"
-                value={eventDate}
-                onChange={(e) => setEventDate(e.target.value)}
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="date"
+              type="date"
+              value={eventDate}
+              onChange={(e) => setEventDate(e.target.value)}
             />
             <InputLabel>Organization</InputLabel>
-            
+
             <Select
-                value={organization}
-                label="Organization"
-                onChange={(e) => setOrganization(e.target.value)}
+              value={organization}
+              label="Organization"
+              onChange={(e) => setOrganization(e.target.value)}
             >
-                 {/* map organizations that the user belongs to */}
-                <MenuItem value={10}>WUEC</MenuItem>
-                <MenuItem value={20}>Kite and Key</MenuItem>
-                <MenuItem value={30}>Spark</MenuItem>
+              {/* map organizations that the user belongs to */}
+              <MenuItem value={10}>WUEC</MenuItem>
+              <MenuItem value={20}>Kite and Key</MenuItem>
+              <MenuItem value={30}>Spark</MenuItem>
             </Select>
             <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
             >
-                Submit
+              Submit
             </Button>
-            
-            </form>
-      </Container>
+
+          </form>
+        </Container>
 
       </ContentBox>
     </Box>

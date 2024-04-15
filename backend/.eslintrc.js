@@ -1,23 +1,26 @@
 module.exports = {
-    env: {
-        commonjs: true,  
-        es2021: true,
-        node: true       
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es2021": true
     },
-   
-    parser: "@typescript-eslint/parser",         
-    parserOptions: {
-        ecmaVersion: 12,                         
-        sourceType: "module",
-        project: './tsconfig.json'                    
-    },
-    plugins: ["@typescript-eslint"],
-    extends: [
-      "eslint:recommended",
-      "plugin:@typescript-eslint/recommended"
+    "extends": "airbnb",
+    "overrides": [
+        {
+            "env": {
+                "node": true
+            },
+            "files": [
+                ".eslintrc.{js,cjs}"
+            ],
+            "parserOptions": {
+                "sourceType": "script"
+            }
+        }
     ],
-    rules: {
-        "no-unused-vars": "warn",                    
-        "no-console": "off"                         
+    "parserOptions": {
+        "ecmaVersion": "latest"
+    },
+    "rules": {
     }
-};
+}
