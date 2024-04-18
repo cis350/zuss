@@ -40,7 +40,7 @@ function Homepage() {
   useEffect(() => {
     console.log('fetching data');
     // `http://${config.server_host}:${config.server_port}/events-data`
-    fetch('http://localhost:3000/events-data')
+    fetch('http://localhost:8000/events-data')
       .then((res) => {
         console.log('first then');
         console.log(res);
