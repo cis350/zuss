@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test jest",
-    "start": "node backend/index.js"
+    "start": "concurrently \"npm run start --prefix backend\" \"npm run start --prefix zuss-app\""
   },
   "author": "",
   "license": "ISC",
