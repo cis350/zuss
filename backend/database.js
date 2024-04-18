@@ -1,7 +1,9 @@
 // load environment variable from .env file 
 if (process.env.NODE_ENV === 'test') {
+    console.log("testing");
     require('dotenv').config({ path: '.env.test' });
   } else {
+    console.log("not testing");
     require('dotenv').config();
   }
   
@@ -9,10 +11,16 @@ if (process.env.NODE_ENV === 'test') {
 // set up mongoDB ... initialize mongodb client with URI 
 const { MongoClient } = require('mongodb');
 const dbName = 'FormInputs';
+console.log("connecting to " + process.env.MONGODB_URI);
 const client = new MongoClient(process.env.MONGODB_URI);
+console.log("connected!");
 
-
-
+//hi can you see this
+//this is actually so cool !! 
+//where is your .env file? the non test one
+// IT WORKSSSS
+// wait jk it doesnt but ya omg its so magical
+// rn its in the root directory but she's been moving around
 
 /**
  * Asynchronously connects to the MongoDB database
