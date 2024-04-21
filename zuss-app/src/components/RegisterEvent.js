@@ -45,7 +45,30 @@ function RegisterEvent() {
     navigate('/homepage');
   };
 
-  const handleSubmit = async (e) => {};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const eventInfo = { eventName, eventDate, organization };
+
+    try {
+      const response = await fetch('http://localhost:8000/register-event', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(eventInfo),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Event registration success:', data);
+        navigate('/homepage'); // navigate to homepage or a confirmation page after successful registration
+      } else {
+        const errorData = await response.json();
+        setErrorMessage(`Failed: ${errorData.message}`);
+        console.error('Event registration failed:', errorData);
+      }
+    } catch (error) {
+      console.error('Error submitting event:', error);
+      setErrorMessage(`Error: ${error.message}`);
+    }
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
