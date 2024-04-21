@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 // load environment variable from .env file
 if (process.env.NODE_ENV === 'test') {
   console.log('testing');
@@ -91,11 +92,8 @@ async function insertEventData(eventName, eventDate, eventOrganizer) {
   }
   // then insert document in profileInfo collection
   try {
-    const result = await collection.insertOne({
-      name: eventName,
-      date: eventDate,
-      organization: eventOrganizer,
-    });
+    const result = await collection.insertOne({ name: eventName, date: eventDate, 
+      organization: eventOrganizer });
     // log number of inserted documents for testing for
     console.log(`${result.insertedCount} documents were inserted`);
   } catch (error) {
