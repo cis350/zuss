@@ -30,30 +30,50 @@ const { connect } = require('./database');
         throw new Error(error);
       }
     }
-  
-  
-  async function fetchEventData() {
-    const db = await connect();
-    const collection = db.collection('Clubs');
-    console.log('fetchEventData');
-  
-    try {
-      // console.log("fetchEventData");
-      // const data = await collection.find({}).toArray();
-      temp_data = [{ clubName: 'WUEC', eventName: 'Hackathon' }];
-      console.log('data', temp_data);
-      return temp_data;
-    } catch (error) {
-      console.log('womp womp');
-      console.log(error);
-      throw new Error(error);
+
+    
+    /**
+     * Fetch all events from Events collection
+     *
+     * @returns {Promise}
+     * @throws {Error} Throws an error if retrieval fails
+     */
+    async function fetchEvents() {
+        const db = await connect();
+        const collection = db.collection('Events');
+    
+        try {
+            const data = await collection.find({}).toArray(); 
+            return data; 
+        }  catch (error) {
+            throw new Error(error);
+        }
     }
-  }
   
-  async function close() {
-    await client.close();
-  }
   
-  module.exports = {
-    insertEventData, fetchEventData};
+ /**
+ * Fetches a single event by its name.
+ *
+ * @param {string} eventName Name of the event to retrieve
+ * @returns {Promise}
+ * @throws {Error} Throws an error if retrieval fails or event does not exist
+ */
+async function fetchEventData(eventName) {
+    const db = await connect();
+    const collection = db.collection('Events');
+
+    try {
+        const event = await collection.findOne({ name: eventName });
+        if (!event) {
+          throw new Error('Event not found');
+        }
+        return event;
+    } catch (error) {
+        console.error('Error fetching event data:', error);
+        throw new Error(error);
+    }
+}
+  
+  
+  module.exports = { insertEventData, fetchEvents, fetchEventData };
   

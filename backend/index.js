@@ -7,6 +7,7 @@ if (process.env.NODE_ENV === 'test') {
 const express = require('express');
 const path = require('path');
 const database = require('./database');
+const eventsDataBase = require('./events');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 
@@ -86,33 +87,30 @@ app.post('/login', async(req, res) => {
 })
 
 
-app.post('/register-event', async (req, res) => {
-  const {name, date, organization} = req.body; 
+app.post('/add-event', async (req, res) => {
+  const { name, date, organization } = req.body; 
 
   if (!name || !date || !organization) {
-    return res.status(400).json({ message: "Event name, date, and organizer are required." });
+    return res.status(400).json({ message: 'Event name, date, and organizer are required.' });
   }
 
   try {
-    await database.insertEventData(name, date, organization); 
-    return res.status(201).json({ token, message: "Successfully registered event." })
+    await eventsDataBase.insertEventData(name, date, organization); 
+    return res.status(201).json({ message: 'Successfully registered event.' });
   } catch (error) {
     // if error inserting data, send 500 level error code 
-    if (error.message === 'Username already exists') {
-      return res.status(400).send('Username already exists.');
-    }
     console.error('Error inserting data:', error);
     return res.status(500).send('Failed to insert data.');
   }
 });
 
-app.get('/events-data', async (_req, res) => {
-  console.log("/events-data");
+app.get('/event', async (_req, res) => {
+  console.log('/events-data');
   try {
-    const data = await database.fetchEventData(); 
-    console.log("successfully got the data");
+    const data = await eventsDataBase.fetchEventData();
+    console.log('successfully got the data');
     console.log('data:', data);
-    return res.status(200).json({ data, message: "Successfully received sample data." });
+    return res.status(200).json({ data, message: 'Successfully received sample data.' });
   } catch (error) {
     console.error('Error receiving sample data:', error);
     res.status(500).send('Failed to receive sample data', error);
