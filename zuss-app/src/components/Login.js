@@ -28,11 +28,13 @@ function Login() {
     const url = `http://localhost:8000${endpoint}`;
 
     try {
+      console.log('Sending request to:', url, 'with data:', userInfo);
       const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userInfo),
       });
+      console.log('Response received:', response);
       if (response.ok) {
         console.log(url.length);
         const data = await response.json();

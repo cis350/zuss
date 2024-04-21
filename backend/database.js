@@ -80,25 +80,28 @@ async function insertAccountData(user, pass) {
  */
 
 async function insertEventData(eventName, eventDate, eventOrganizer) {
-    const db = await connect();
-    const collection = db.collection('Events');
-    const existingName = await collection.findOne({ name: eventName});
-    const existingDate = await collection.findOne({ date: eventDate});
-    const existingOrganizer = await collection.findOne({ organization: eventOrganizer});
+  const db = await connect();
+  const collection = db.collection('Events');
+  const existingName = await collection.findOne({ name: eventName });
+  const existingDate = await collection.findOne({ date: eventDate });
+  const existingOrganizer = await collection.findOne({ organization: eventOrganizer });
 
-  
-    if (existingName && existingDate && existingOrganizer) {
-      throw new Error('Event already exists');
-    }
-    // then insert document in profileInfo collection
-    try {
-      const result = await collection.insertOne({ name: eventName, date: eventDate, organization : eventOrganizer});
-      // log number of inserted documents for testing for
-      console.log(`${result.insertedCount} documents were inserted`);
-    } catch (error) {
-      throw new Error(error);
-    }
+  if (existingName && existingDate && existingOrganizer) {
+    throw new Error('Event already exists');
   }
+  // then insert document in profileInfo collection
+  try {
+    const result = await collection.insertOne({
+      name: eventName,
+      date: eventDate,
+      organization: eventOrganizer,
+    });
+    // log number of inserted documents for testing for
+    console.log(`${result.insertedCount} documents were inserted`);
+  } catch (error) {
+    throw new Error(error);
+  }
+}
 
 /**
  * Fetches all account data from the ProfileInfo collection.
@@ -129,9 +132,9 @@ async function fetchEventData() {
   try {
     // console.log("fetchEventData");
     // const data = await collection.find({}).toArray();
-    temp_data = [{ clubName: 'WUEC', eventName: 'Hackathon' }];
-    console.log('data', temp_data);
-    return temp_data;
+    const tempData = [{ clubName: 'WUEC', eventName: 'Hackathon' }];
+    console.log('data', tempData);
+    return tempData;
   } catch (error) {
     console.log('womp womp');
     console.log(error);
