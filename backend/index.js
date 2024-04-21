@@ -85,7 +85,27 @@ app.post('/login', async(req, res) => {
   }
 })
 
-/*
+
+app.post('/register-event', async (req, res) => {
+  const {name, date, organization} = req.body; 
+
+  if (!name || !date || !organization) {
+    return res.status(400).json({ message: "Event name, date, and organizer are required." });
+  }
+
+  try {
+    await database.insertEventData(name, date, organization); 
+    return res.status(201).json({ token, message: "Successfully registered event." })
+  } catch (error) {
+    // if error inserting data, send 500 level error code 
+    if (error.message === 'Username already exists') {
+      return res.status(400).send('Username already exists.');
+    }
+    console.error('Error inserting data:', error);
+    return res.status(500).send('Failed to insert data.');
+  }
+});
+
 app.get('/events-data', async (_req, res) => {
   console.log("/events-data");
   try {
@@ -98,7 +118,6 @@ app.get('/events-data', async (_req, res) => {
     res.status(500).send('Failed to receive sample data', error);
   }
 });
-*/
 
 
 //tester endpoint, feel free to delete

@@ -1,78 +1,59 @@
-if (process.env.NODE_ENV === 'test') {
-    require('dotenv').config({ path: '.env.test' });
-  } else {
-    require('dotenv').config();
+const { connect } = require('./database');
+
+  /**
+   * Inserts a new event document into the Events collection.
+   *
+   * @param {string} eventName Events's name
+   * @param {string} eventDate  Event's date
+   * @param {string} eventOrganizer  Event's organizer
+   * @returns {Promise}
+   * @throws {Error} Throws an error if the event already exists or if the insert fails
+   */
+  
+  async function insertEventData(eventName, eventDate, eventOrganizer) {
+      const db = await connect();
+      const collection = db.collection('Events');
+      const existingName = await collection.findOne({ name: eventName});
+      const existingDate = await collection.findOne({ date: eventDate});
+      const existingOrganizer = await collection.findOne({ organization: eventOrganizer});
+  
+    
+      if (existingName && existingDate && existingOrganizer) {
+        throw new Error('Event already exists');
+      }
+      // then insert document in profileInfo collection
+      try {
+        const result = await collection.insertOne({ name: eventName, date: eventDate, organization : eventOrganizer});
+        // log number of inserted documents for testing for
+        console.log(`${result.insertedCount} documents were inserted`);
+      } catch (error) {
+        throw new Error(error);
+      }
+    }
+  
+  
+  async function fetchEventData() {
+    const db = await connect();
+    const collection = db.collection('Clubs');
+    console.log('fetchEventData');
+  
+    try {
+      // console.log("fetchEventData");
+      // const data = await collection.find({}).toArray();
+      temp_data = [{ clubName: 'WUEC', eventName: 'Hackathon' }];
+      console.log('data', temp_data);
+      return temp_data;
+    } catch (error) {
+      console.log('womp womp');
+      console.log(error);
+      throw new Error(error);
+    }
   }
   
-  const express = require('express');
-  const path = require('path');
-  const database = require('./database');
-  const cors = require('cors');
+  async function close() {
+    await client.close();
+  }
   
-  const app = express();
-  //app.use(express.json()); //access request body as json
+  module.exports = {
+    insertEventData, fetchEventData};
   
-  app.use(express.urlencoded({ extended: true }));
-  
-  // use cors middleware to allow frontend to communicate with backend
-  
-  const corsOptions = {
-    origin: 'http://localhost:3000', 
-  };
-  
-  //app.use(cors(corsOptions));
-  app.use(cors);
-  
-  
-  app.post('/sign-up', async (req, res) => {
-    const {name, date, organization} = req.body; 
-  
-    if (!name || !date || !organization) {
-      return res.status(400).json({ message: "Event name, date, and organizer are required." });
-    }
-  
-    try {
-      await database.insertEventData(name, date, organization); 
-      return res.status(201).json({ token, message: "Successfully registered event." })
-    } catch (error) {
-      // if error inserting data, send 500 level error code 
-      if (error.message === 'Username already exists') {
-        return res.status(400).send('Username already exists.');
-      }
-      console.error('Error inserting data:', error);
-      return res.status(500).send('Failed to insert data.');
-    }
-  });
-  
-  app.get('/events-data', async (_req, res) => {
-    console.log("/events-data");
-    try {
-      const data = await database.fetchEventData(); 
-      console.log("successfully got the data");
-      console.log('data:', data);
-      return res.status(200).json({ data, message: "Successfully received sample data." });
-    } catch (error) {
-      console.error('Error receiving sample data:', error);
-      res.status(500).send('Failed to receive sample data', error);
-    }
-  });
-
-  
-  //tester endpoint, feel free to delete
-  app.get('/accounts-data', async (_req, res) => {
-    try {
-      const data = await database.fetchAccountData(); 
-      res.json(data);
-    } catch (error) {
-      console.error('Error inserting sample data:', error);
-      res.status(500).send('Failed to insert sample data', error);
-    }
-  });
-  
-  
-  app.use(express.static(path.join(__dirname, '../zuss-app/build')));
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../zuss-app/build/index.html'));
-  });
-  
-module.exports = app;
