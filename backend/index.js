@@ -105,7 +105,6 @@ app.post('/add-event', async (req, res) => {
 });
 
 app.get('/event', async (_req, res) => {
-  console.log('/events-data');
   try {
     const data = await eventsDataBase.fetchEventData();
     console.log('successfully got the data');
@@ -117,11 +116,9 @@ app.get('/event', async (_req, res) => {
   }
 });
 
-
-//tester endpoint, feel free to delete
-app.get('/accounts-data', async (_req, res) => {
+app.get('/events', async (_req, res) => {
   try {
-    const data = await database.fetchAccountData(); 
+    const data = await eventsDataBase.fetchEvents(); 
     res.json(data);
   } catch (error) {
     console.error('Error inserting sample data:', error);
