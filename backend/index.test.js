@@ -1,9 +1,24 @@
 /* eslint-disable no-undef */
 // contains test cases for index.js endpoints
 // const request = require('supertest'); //make HTTP request without starting the server
+
 const request = require('supertest');
-const app = require('./server.js');
+const { startServer, closeServer } = require('./server');
 const database = require('./database');
+
+const app = require('./index');
+
+let server;
+
+beforeAll(() => {
+  server = startServer();
+});
+
+afterAll(async () => {
+  closeServer(server);
+  // Make sure your database module exports a function to close the database connection
+  database.close();
+});
 
 const testUsername = process.env.TEST_USERNAME;
 const testPassword = process.env.TEST_PASSWORD;
@@ -11,6 +26,8 @@ const testPassword = process.env.TEST_PASSWORD;
 /**
  * Test the login endpoint
  */
+
+
 describe('login', () => {
   afterAll(async () => {
     await database.client.close(); // Close the MongoDB connection
@@ -76,6 +93,4 @@ describe('sign up', () => {
       .post('/sign-up')
       .send({ username: testUsername, password: randomValue });
     expect(response.statusCode).toBe(400);
-    expect(response.text).toEqual('Username already exists.');
-  });
-});
+    expect(response.text).toEqual('Usern

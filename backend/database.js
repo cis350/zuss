@@ -39,6 +39,7 @@ async function connect() {
   } catch (err) {
     console.error('Failed to connect', err);
     process.exit(1);
+    
   }
 }
 
@@ -145,5 +146,5 @@ async function close() {
 }
 
 module.exports = {
-  connect, insertAccountData, insertEventData, fetchAccountData, fetchEventData, client, close,
+  connect, insertAccountData, insertEventData, fetchAccountData, fetchEventData, client, close
 };

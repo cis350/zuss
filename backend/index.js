@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 if (process.env.NODE_ENV === 'test') {
   require('dotenv').config({ path: '.env.test' });
 } else {
@@ -21,12 +22,12 @@ const corsOptions = {
   origin: 'http://localhost:3000',
 };
 
-app.use(cors(corsOptions));
-// app.use(cors);
+// app.use(cors(corsOptions));
+app.use(cors());
 
 // root endpoint route
-app.get('/', (_req, resp) => {
-  resp.json({ message: 'hello, deployment is active' });
+app.get('/', (req, res) => {
+  res.status(200).send('Hello World!');
 });
 
 app.post('/sign-up', async (req, res) => {
@@ -63,7 +64,8 @@ app.post('/login', async (req, res) => {
     console.log('Fetching account data...');
     const allData = await database.fetchAccountData();
     console.log('Account data retrieved:', allData);
-    const user = allData.find((u) => u.username === req.body.username && u.password === req.body.password);
+    const user = allData.find((u) => u.username === req.body.username && u.password
+    === req.body.password);
 
     if (!user) {
       console.log('No user found with the provided credentials');
