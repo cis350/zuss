@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test jest --coverage",
-    "lint": "eslint ./**/*.js ./**/*.jsx",
+    "lint": "eslint ./**/*.js ./**/*.jsx --quiet",
     "lint:fix": "eslint . --ext .js,.jsx --fix",
     "start": "cd ../zuss-app && npm run build && cd ../backend && node server.js"
   },

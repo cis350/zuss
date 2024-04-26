@@ -4,7 +4,6 @@ import {
   AppBar, Toolbar, Typography, Button, Box,
 } from '@mui/material';
 import { styled } from '@mui/system';
-import { DataGrid } from '@mui/x-data-grid';
 
 const config = require('../config.json');
 
