@@ -93,4 +93,6 @@ describe('sign up', () => {
       .post('/sign-up')
       .send({ username: testUsername, password: randomValue });
     expect(response.statusCode).toBe(400);
-    expect(response.text).toEqual('Usern
+    expect(response.text).toEqual('User');
+  });
+});
