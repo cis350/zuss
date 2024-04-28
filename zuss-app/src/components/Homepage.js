@@ -10,6 +10,9 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
+import Modal from '@mui/material/Modal';
+import { blue } from '@mui/material/colors';
+const blueColor = blue[50];
 
 const config = require('../config.json');
 
@@ -39,14 +42,26 @@ const ContentBox = styled(Box)(({ theme }) => ({
 
 function Homepage() {
   const navigate = useNavigate();
-  const [data, setData] = useState([{ id:0, clubName: 'PennApps', eventName: 'Hackathon', image: "https://s3.amazonaws.com/penn.clubs/clubs_small/pennapps.png", description:"biggest collegiate hackathon!"},
-  {id:1, clubName: 'WUEC', eventName:'Conference', image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoxzxIkJDyIgvJwG6O3yH0CIGajvTuY6Bs3deZ60CPfg&s", description: "entrepreneurship conference and networking event"},
-  {id: 2, clubName: 'AOE', eventName:'AOE Formal', image:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/HLR-FOAM-PARTY-02.JPG/640px-HLR-FOAM-PARTY-02.JPG", description: "a fun night with aoe"},
-  {id: 2, clubName: 'SPEC', eventName:'Spring Fling', image:"https://www.thepinknews.com/wp-content/uploads/2024/04/future-metro-boomin-tour.jpg", description: "ft. Metro and Daya"}
+  const [data, setData] = useState([{ id:0, clubName: 'PennApps', eventName: 'Hackathon', image: "https://s3.amazonaws.com/penn.clubs/clubs_small/pennapps.png", description:"biggest collegiate hackathon!", descriptionLong:"lengthy description", date: "2024-09-10" },
+  {id:1, clubName: 'WUEC', eventName:'Conference', image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoxzxIkJDyIgvJwG6O3yH0CIGajvTuY6Bs3deZ60CPfg&s", description: "entrepreneurship conference and networking event", descriptionLong:"lengthy description", date: "2024-03-22"},
+  {id: 2, clubName: 'AOE', eventName:'AOE Formal', image:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/HLR-FOAM-PARTY-02.JPG/640px-HLR-FOAM-PARTY-02.JPG", description: "a fun night with aoe", descriptionLong:"lengthy description", date: "2024-05-01"},
+  {id: 3, clubName: 'SPEC', eventName:'Spring Fling', image:"https://www.thepinknews.com/wp-content/uploads/2024/04/future-metro-boomin-tour.jpg", description: "ft. Metro and Daya", descriptionLong:"lengthy description", date: "2024-04-19"}
 ]);
+
+const [showModal, setShowModal] = useState(false);
+
+function handleCloseModal(card){
+  console.log('closing modal');
+  setShowModal(false);
+}
+
+function handleOpenModal(card){
+  setShowModal(true);
+  console.log(card);
+}
   
   
-  console.log('starting');
+console.log('starting. showModal = ' + showModal);
 
   // useEffect(() => {
   //   console.log('fetching data');
@@ -112,21 +127,67 @@ function Homepage() {
    <Container sx={{ py: 8}} maxWidth="md">
         <Grid container spacing={4} sx={{mb:5}}>
             {data.map((card) => (
-              <Grid item key={card} xs={12} sm={6} md={4}>
+              <Grid item key={card.id} xs={12} sm={6} md={4}>
                 <Card
                   sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+                  // onClick={() => handleOpenModal(card)}
                 >
+                  <Modal
+                    open={showModal}
+                    onClose={handleCloseModal}
+                    aria-labelledby="parent-modal-title"
+                    aria-describedby="parent-modal-description"
+                  >
+                    <Grid
+                    container
+                    spacing={0}
+                    direction="column"
+                    alignItems="center"
+                    justifyContent="center"
+                    sx={{ minHeight: '100vh' }}
+                  >
+                    <Grid item xs={3}>
+                    <Box sx={{
+                        bgcolor: 'background.paper',
+                        boxShadow: 1,
+                        borderRadius: 2,
+                        p: 2,
+                        minWidth: 300,
+                        flexGrow:1
+                      }}
+                      width={500}
+                      alignContent={'center'}>
+                        <CardMedia
+                          component="div"
+                          sx={{
+                            // 16:9
+                            pt: '56.25%',
+                          }}
+                          image = {card.image}
+                        />
+                      <Typography id="modal-modal-title" variant="h6" component="h2">
+                        {card.eventName}
+                      </Typography>
+                      <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                        {card.date}
+                      </Typography>
+                      <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                        {card.descriptionLong}
+                      </Typography>
+                      <Button onClick={handleCloseModal}>Close</Button>
+                    </Box>
+                    </Grid>
+                  </Grid>
+                    
+                    
+                  </Modal>
                   <CardMedia
                     component="div"
                     sx={{
                       // 16:9
                       pt: '56.25%',
                     }}
-                    // image="https://source.unsplash.com/random?wallpapers"
                     image = {card.image}
-                    // image = {require('./projectImages/'+card.image)}
-                    // style={{height: 50, paddingTop: '56.25%'}}
-                    // image={image}
                   />
                   <CardContent sx={{ flexGrow: 1 }}>
                     <Typography gutterBottom variant="h5" component="h2">
@@ -139,11 +200,13 @@ function Homepage() {
                       {card.description}
                     </Typography>
                   </CardContent>
+                  <Button onClick={handleOpenModal}>See more</Button>
                   {/* <CardActions>
                     <Button size="small">View</Button>
                     <Button size="small">Edit</Button>
                   </CardActions> */}
                 </Card>
+                
               </Grid>
             ))}
           </Grid>

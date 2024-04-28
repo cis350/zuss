@@ -36,8 +36,6 @@ async function connect() {
     }
 }
 
-
-
 /**
  * Inserts a new account document into the ProfileInfo collection.
  * 
