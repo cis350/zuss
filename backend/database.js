@@ -39,7 +39,6 @@ async function connect() {
   } catch (err) {
     console.error('Failed to connect', err);
     process.exit(1);
-    
   }
 }
 
@@ -72,37 +71,6 @@ async function insertAccountData(user, pass) {
 }
 
 /**
- * Inserts a new event document into the Events collection.
- *
- * @param {string} eventName Events's name
- * @param {string} eventDate  Event's date
- * @param {string} eventOrganizer  Event's organizer
- * @returns {Promise}
- * @throws {Error} Throws an error if the event already exists or if the insert fails
- */
-
-async function insertEventData(eventName, eventDate, eventOrganizer) {
-  const db = await connect();
-  const collection = db.collection('Events');
-  const existingName = await collection.findOne({ name: eventName });
-  const existingDate = await collection.findOne({ date: eventDate });
-  const existingOrganizer = await collection.findOne({ organization: eventOrganizer });
-
-  if (existingName && existingDate && existingOrganizer) {
-    throw new Error('Event already exists');
-  }
-  // then insert document in profileInfo collection
-  try {
-    const result = await collection.insertOne({ name: eventName, date: eventDate, 
-      organization: eventOrganizer });
-    // log number of inserted documents for testing for
-    console.log(`${result.insertedCount} documents were inserted`);
-  } catch (error) {
-    throw new Error(error);
-  }
-}
-
-/**
  * Fetches all account data from the ProfileInfo collection.
  *
  * @returns {Promise}
@@ -122,21 +90,57 @@ async function fetchAccountData() {
     throw new Error(error);
   }
 }
-
-async function fetchEventData() {
+async function insertEventData(eventName, eventDate, eventLocation, eventDescription, eventOrganizer) {
   const db = await connect();
-  const collection = db.collection('Clubs');
-  console.log('fetchEventData');
+  const collection = db.collection('Events');
+  const existingName = await collection.findOne({ name: eventName });
+  const existingDate = await collection.findOne({ date: eventDate });
+  const existingLocation = await collection.findOne({ location: eventLocation });
+  const existingDescription = await collection.findOne({ description: eventDescription });
+  const existingOrganizer = await collection.findOne({ organization: eventOrganizer });
+
+  if (existingName && existingDate && existingLocation && existingDescription
+    && existingOrganizer) {
+    throw new Error('Event already exists');
+  }
+  // then insert document in Events collection
+  try {
+    const result = await collection.insertOne({
+      name: eventName,
+      date: eventDate,
+      location: eventLocation,
+      description: eventDescription,
+      organization: eventOrganizer,
+    });
+    // log number of inserted documents for testing for
+    console.log(`${result.insertedCount} documents were inserted`);
+  } catch (error) {
+    throw new Error(error);
+  }
+}
+async function fetchEventData(eventName) {
+  const db = await connect();
+  const collection = db.collection('Events');
+  try {
+    const event = await collection.findOne({ name: eventName });
+    if (!event) {
+      throw new Error('Event not found');
+    }
+    return event;
+  } catch (error) {
+    console.error('Error fetching event data:', error);
+    throw new Error(error);
+  }
+}
+
+async function fetchEvents() {
+  const db = await connect();
+  const collection = db.collection('Events');
 
   try {
-    // console.log("fetchEventData");
-    // const data = await collection.find({}).toArray();
-    const tempData = [{ clubName: 'WUEC', eventName: 'Hackathon' }];
-    console.log('data', tempData);
-    return tempData;
+    const data = await collection.find({}).toArray();
+    return data;
   } catch (error) {
-    console.log('womp womp');
-    console.log(error);
     throw new Error(error);
   }
 }
@@ -146,5 +150,5 @@ async function close() {
 }
 
 module.exports = {
-  connect, insertAccountData, insertEventData, fetchAccountData, fetchEventData, client, close
+  connect, insertAccountData, insertEventData, fetchAccountData, fetchEvents, fetchEventData, client, close,
 };
