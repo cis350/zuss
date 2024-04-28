@@ -127,26 +127,26 @@ function ZussModal({card}){
   
 console.log('starting. showModal = ' + showModal);
 
-  // useEffect(() => {
-  //   console.log('fetching data');
-  //   // `http://${config.server_host}:${config.server_port}/events-data`
-  //   fetch('http://localhost:8000/events-data')
-  //     .then((res) => {
-  //       console.log('first then');
-  //       console.log(res);
-  //       res.json();
-  //     })
-  //     .then((resJson) => {
-  //       console.log('resJson');
-  //       console.log(resJson);
-  //       const events = resJson.map((event) => ({ id: event.eventName, ...event.clubName }));
-  //       setData(events);
-  //       // const events = resJson.map(event => ({ id: event.eventName, ...event }));
-  //       // setData(events);
-  //     }).catch((error) => {
-  //       console.log('Error fetching data:', error);
-  //     });
-  // }, []);
+  useEffect(() => {
+    console.log('fetching data');
+    // `http://${config.server_host}:${config.server_port}/events-data`
+    fetch('http://localhost:8000/events-data')
+      .then((res) => {
+        console.log('first then');
+        console.log(res);
+        res.json();
+      })
+      .then((resJson) => {
+        console.log('resJson');
+        console.log(resJson);
+        const events = resJson.map((event) => ({ id: event.eventName, ...event.clubName }));
+        setData(events);
+        // const events = resJson.map(event => ({ id: event.eventName, ...event }));
+        // setData(events);
+      }).catch((error) => {
+        console.log('Error fetching data:', error);
+      });
+  }, []);
 
   const columns = [
     { field: 'eventName', headerName: 'Event', width: 300 },
