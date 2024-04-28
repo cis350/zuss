@@ -99,19 +99,19 @@ app.get('/events-data', async (_req, res) => {
 });
 
 app.post('/post-event', async (req, res) => {
-  const { name, date, organization } = req.body;
+  const { name, date, location, description, organizer } = req.body;
 
-  if (!name || !date || !organization) {
+  if (!name || !date || !organizer || !location || !description) {
     return res.status(400).json({ message: 'Event name, date, and organizer are required.' });
   }
 
   try {
-    await database.insertEventData(name, date, organization);
+    await database.insertEventData(name, date, location, description, organizer);
     return res.status(201).json({ message: 'Successfully registered event.' });
   } catch (error) {
     // if error inserting data, send 500 level error code
-    if (error.message === 'Username already exists') {
-      return res.status(400).send('Username already exists.');
+    if (error.message === 'Event already exists') {
+      return res.status(400).send('Event already exists.');
     }
     console.error('Error inserting data:', error);
     return res.status(500).send('Failed to insert data.');
