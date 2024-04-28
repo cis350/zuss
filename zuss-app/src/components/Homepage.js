@@ -42,13 +42,14 @@ const ContentBox = styled(Box)(({ theme }) => ({
 
 function Homepage() {
   const navigate = useNavigate();
-  const [data, setData] = useState([{ id:0, clubName: 'PennApps', eventName: 'Hackathon', image: "https://s3.amazonaws.com/penn.clubs/clubs_small/pennapps.png", description:"biggest collegiate hackathon!", descriptionLong:"lengthy description", date: "2024-09-10" },
-  {id:1, clubName: 'WUEC', eventName:'Conference', image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoxzxIkJDyIgvJwG6O3yH0CIGajvTuY6Bs3deZ60CPfg&s", description: "entrepreneurship conference and networking event", descriptionLong:"lengthy description", date: "2024-03-22"},
-  {id: 2, clubName: 'AOE', eventName:'AOE Formal', image:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/HLR-FOAM-PARTY-02.JPG/640px-HLR-FOAM-PARTY-02.JPG", description: "a fun night with aoe", descriptionLong:"lengthy description", date: "2024-05-01"},
-  {id: 3, clubName: 'SPEC', eventName:'Spring Fling', image:"https://www.thepinknews.com/wp-content/uploads/2024/04/future-metro-boomin-tour.jpg", description: "ft. Metro and Daya", descriptionLong:"lengthy description", date: "2024-04-19"}
+  const [data, setData] = useState([{ id:0, clubName: 'PennApps', eventName: 'Hackathon', image: "https://s3.amazonaws.com/penn.clubs/clubs_small/pennapps.png", description:"biggest collegiate hackathon!", descriptionLong:"lengthy description", date: "2024-09-10", location:"Equad"},
+  {id:1, clubName: 'WUEC', eventName:'Conference', image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoxzxIkJDyIgvJwG6O3yH0CIGajvTuY6Bs3deZ60CPfg&s", description: "entrepreneurship conference and networking event", descriptionLong:"lengthy description", date: "2024-03-22", location:"Huntsman"},
+  {id: 2, clubName: 'AOE', eventName:'AOE Formal', image:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/HLR-FOAM-PARTY-02.JPG/640px-HLR-FOAM-PARTY-02.JPG", description: "a fun night with aoe", descriptionLong:"lengthy description", date: "2024-05-01", location:"TLO"},
+  {id: 3, clubName: 'SPEC', eventName:'Spring Fling', image:"https://www.thepinknews.com/wp-content/uploads/2024/04/future-metro-boomin-tour.jpg", description: "ft. Metro and Daya", descriptionLong:"lengthy description", date: "2024-04-19", location:"Penn Park"}
 ]);
 
 const [showModal, setShowModal] = useState(false);
+const [selectedCard, setSelectedCard] = useState({});
 
 function handleCloseModal(card){
   console.log('closing modal');
@@ -57,7 +58,70 @@ function handleCloseModal(card){
 
 function handleOpenModal(card){
   setShowModal(true);
+  setSelectedCard(card);
   console.log(card);
+}
+
+function ZussModal({card}){
+  return (
+    <Modal
+      open={showModal}
+      onClose={handleCloseModal}
+      aria-labelledby="parent-modal-title"
+      aria-describedby="parent-modal-description"
+    >
+      <Grid
+      container
+      spacing={0}
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+      sx={{ minHeight: '100vh' }}
+    >
+      <Grid item xs={3}>
+      <Box sx={{
+          bgcolor: 'background.paper',
+          boxShadow: 1,
+          borderRadius: 2,
+          p: 2,
+          minWidth: 300,
+          flexGrow:1
+        }}
+        width={500}
+        alignContent={'center'}>
+          <CardMedia
+            component="div"
+            sx={{
+              // 16:9
+              pt: '56.25%',
+            }}
+            image = {card.image}
+          />
+        <Typography id="modal-modal-title" variant="h6" component="h2">
+          {card.eventName}
+        </Typography>
+        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+          <b>Organization</b>: {card.clubName}
+        </Typography>
+        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+          <b>Date</b>: {card.date}
+        </Typography>
+        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+          <b>Location</b>: {card.location}
+        </Typography>
+        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+          <b>Description</b>: {card.descriptionLong}
+        </Typography>
+        <Box textAlign='center'>
+        <Button onClick={handleCloseModal} variant="contained" sx={{ mt: 2,  width: '100%' }}>Close</Button>
+        </Box>
+      </Box>
+      </Grid>
+    </Grid>
+      
+      
+    </Modal>
+  )
 }
   
   
@@ -132,55 +196,7 @@ console.log('starting. showModal = ' + showModal);
                   sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
                   // onClick={() => handleOpenModal(card)}
                 >
-                  <Modal
-                    open={showModal}
-                    onClose={handleCloseModal}
-                    aria-labelledby="parent-modal-title"
-                    aria-describedby="parent-modal-description"
-                  >
-                    <Grid
-                    container
-                    spacing={0}
-                    direction="column"
-                    alignItems="center"
-                    justifyContent="center"
-                    sx={{ minHeight: '100vh' }}
-                  >
-                    <Grid item xs={3}>
-                    <Box sx={{
-                        bgcolor: 'background.paper',
-                        boxShadow: 1,
-                        borderRadius: 2,
-                        p: 2,
-                        minWidth: 300,
-                        flexGrow:1
-                      }}
-                      width={500}
-                      alignContent={'center'}>
-                        <CardMedia
-                          component="div"
-                          sx={{
-                            // 16:9
-                            pt: '56.25%',
-                          }}
-                          image = {card.image}
-                        />
-                      <Typography id="modal-modal-title" variant="h6" component="h2">
-                        {card.eventName}
-                      </Typography>
-                      <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                        {card.date}
-                      </Typography>
-                      <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                        {card.descriptionLong}
-                      </Typography>
-                      <Button onClick={handleCloseModal}>Close</Button>
-                    </Box>
-                    </Grid>
-                  </Grid>
-                    
-                    
-                  </Modal>
+                  <ZussModal card={selectedCard}/>
                   <CardMedia
                     component="div"
                     sx={{
@@ -200,7 +216,7 @@ console.log('starting. showModal = ' + showModal);
                       {card.description}
                     </Typography>
                   </CardContent>
-                  <Button onClick={handleOpenModal}>See more</Button>
+                  <Button onClick={() => handleOpenModal(card)}>See more</Button>
                   {/* <CardActions>
                     <Button size="small">View</Button>
                     <Button size="small">Edit</Button>
