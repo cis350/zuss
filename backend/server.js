@@ -1,24 +1,21 @@
 const app = require('./index');
-const database = require('./database');
+
 const port = process.env.PORT || 8000;
 
-const server = app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
+function startServer() {
+  const server = app.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}`);
+  });
+  return server;
+}
 
+function closeServer(server) {
+  server.close(() => {
+    console.log('HTTP server closed');
+  });
+}
+if (require.main === module) {
+  startServer();
+}
 
-process.on('SIGINT', async () => {
-    console.log('Closing database connection...');
-    await database.client.close();
-    server.close(() => {
-      console.log('HTTP server closed');
-  });
-  });
-  
-  process.on('SIGTERM', async () => {
-    console.log('SIGTERM signal received: closing MongoDB connection');
-    await database.client.close(); // Assuming 'client' is exported from your database module
-    server.close(() => {
-        console.log('HTTP server closed');
-    });
-  });
+module.exports = { startServer, closeServer };

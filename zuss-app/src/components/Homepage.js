@@ -181,20 +181,13 @@ console.log('starting. showModal = ' + showModal);
         <Typography variant="h4" sx={{ color: 'white' }}>
           Upcoming Events
         </Typography>
-        {/* map over events */}
-        {/* <DataGrid
-          rows={data}
-          columns={columns}
-          rowsPerPageOptions={[5, 10, 25]}
-          autoHeight
-  />*/}
+        
    <Container sx={{ py: 8}} maxWidth="md">
         <Grid container spacing={4} sx={{mb:5}}>
             {data.map((card) => (
               <Grid item key={card.id} xs={12} sm={6} md={4}>
                 <Card
                   sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
-                  // onClick={() => handleOpenModal(card)}
                 >
                   <ZussModal card={selectedCard}/>
                   <CardMedia
@@ -217,10 +210,6 @@ console.log('starting. showModal = ' + showModal);
                     </Typography>
                   </CardContent>
                   <Button onClick={() => handleOpenModal(card)}>See more</Button>
-                  {/* <CardActions>
-                    <Button size="small">View</Button>
-                    <Button size="small">Edit</Button>
-                  </CardActions> */}
                 </Card>
                 
               </Grid>
