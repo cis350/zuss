@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  AppBar, Toolbar, Typography, Button, Box,
+  AppBar, Toolbar, Typography, Button, Box, Card, CardContent, CardMedia, Grid, Container, Modal
 } from '@mui/material';
 import { styled } from '@mui/system';
-
-const config = require('../config.json');
+import { blue } from '@mui/material/colors';
 
 const StyledAppBar = styled(AppBar)({
   backgroundColor: '#123456',
@@ -33,34 +32,44 @@ const ContentBox = styled(Box)(({ theme }) => ({
 
 function Homepage() {
   const navigate = useNavigate();
-  const [data, setData] = useState([{ clubName: 'WUEC', eventName: 'Hackathon' }]);
-  console.log('starting');
+  const [data, setData] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedCard, setSelectedCard] = useState({});
 
   useEffect(() => {
-    console.log('fetching data');
-    // `http://${config.server_host}:${config.server_port}/events-data`
-    fetch('http://localhost:8000/events-data')
-      .then((res) => {
-        console.log('first then');
-        console.log(res);
-        res.json();
-      })
-      .then((resJson) => {
-        console.log('resJson');
-        console.log(resJson);
-        const events = resJson.map((event) => ({ id: event.eventName, ...event.clubName }));
-        setData(events);
-        // const events = resJson.map(event => ({ id: event.eventName, ...event }));
-        // setData(events);
-      }).catch((error) => {
-        console.log('Error fetching data:', error);
-      });
+    fetch('http://localhost:8000/events-data', {
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    }) 
+    .then(res => {
+      if (!res.ok) { 
+        throw new Error('Network response was not ok');
+      }
+      return res.json();
+    })
+    .then(data => {
+      if (data && Array.isArray(data.data)) {
+        setData(data.data.map((item, index) => ({ ...item, id: index })));
+      } else {
+        console.error('Data received is not an array:', data);
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+    });
   }, []);
+  
 
-  const columns = [
-    { field: 'eventName', headerName: 'Event', width: 300 },
-    { field: 'clubName', headerName: 'Organization', width: 200 },
-  ];
+  function handleCloseModal() {
+    setShowModal(false);
+  }
+
+  function handleOpenModal(card) {
+    setShowModal(true);
+    setSelectedCard(card);
+  }
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -87,16 +96,63 @@ function Homepage() {
         </StyledToolbar>
       </StyledAppBar>
       <ContentBox>
-        <Typography variant="h4" sx={{ color: 'white' }}>
+        <Typography variant="h4" sx={{ color: 'white', mb: 4 }}>
           Upcoming Events
         </Typography>
-        {/* map over events */}
-        {/* <DataGrid
-          rows={data}
-          columns={columns}
-          rowsPerPageOptions={[5, 10, 25]}
-          autoHeight
-        /> */}
+        <Container maxWidth="md">
+          <Grid container spacing={4}>
+            {data.map((card) => (
+              <Grid item key={card.id} xs={12} sm={6} md={4}>
+                <Card
+                  sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+                  onClick={() => handleOpenModal(card)}
+                >
+                  <CardMedia
+                    component="img"
+                    sx={{ height: 140 }}
+                    image={card.image}
+                    alt={card.eventName}
+                  />
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="h2">
+                      {card.eventName}
+                    </Typography>
+                    <Typography>
+                      {card.description}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
+        {showModal && (
+          <Modal
+            open={showModal}
+            onClose={handleCloseModal}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                bgcolor: 'background.paper',
+                boxShadow: 24,
+                p: 4,
+                width: 400,
+              }}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                {selectedCard.eventName}
+              </Typography>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                {selectedCard.descriptionLong}
+              </Typography>
+              <Button onClick={handleCloseModal} sx={{ mt: 2, width: '100%' }}>Close</Button>
+            </Box>
+          </Modal>
+        )}
       </ContentBox>
     </Box>
   );

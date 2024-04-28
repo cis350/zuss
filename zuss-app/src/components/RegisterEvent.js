@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import {
-  AppBar, Toolbar, Typography, Button, Box, Container, TextField, Select, MenuItem, InputLabel,
+  AppBar, Toolbar, Typography, Button, Box, Container, TextField, Select, MenuItem, InputLabel, FormControl
 } from '@mui/material';
 import { styled } from '@mui/system';
 
@@ -31,9 +32,10 @@ const ContentBox = styled(Box)(({ theme }) => ({
 
 function RegisterEvent() {
   const navigate = useNavigate();
-  const [isLogin, setIsLogin] = useState(true);
   const [eventName, setEventName] = useState('');
   const [eventDate, setEventDate] = useState('');
+  const [eventDescription, setEventDescription] = useState('');
+  const [eventLocation, setEventLocation] = useState('');
   const [organization, setOrganization] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -45,7 +47,30 @@ function RegisterEvent() {
     navigate('/homepage');
   };
 
-  const handleSubmit = async (e) => {};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setErrorMessage('');
+    try {
+      const response = await axios.post('http://localhost:8000/post-event', {
+        name: eventName,
+        date: eventDate,
+        location: eventLocation,
+        description: eventDescription,
+        organizer: organization
+      });
+
+      
+      navigate('/homepage'); 
+    } catch (error) {
+      if (error.response && error.response.data) {
+        setErrorMessage(error.response.data.message || 'Failed to register event');
+      } else {
+        setErrorMessage('Failed to connect to the server.');
+      }
+    }
+  };
+  
+  
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -63,12 +88,11 @@ function RegisterEvent() {
         </StyledToolbar>
       </StyledAppBar>
       <ContentBox>
-        {/* form to register event */}
-
         <Container component="main" maxWidth="xs">
           <Typography component="h1" variant="h5">
             Register your event here!
           </Typography>
+          {errorMessage && <Typography color="error">{errorMessage}</Typography>}
           <form onSubmit={handleSubmit}>
             <TextField
               variant="outlined"
@@ -88,22 +112,47 @@ function RegisterEvent() {
               required
               fullWidth
               name="date"
+              label="Event Date"
               type="date"
               value={eventDate}
               onChange={(e) => setEventDate(e.target.value)}
             />
-            <InputLabel>Organization</InputLabel>
-
-            <Select
-              value={organization}
-              label="Organization"
-              onChange={(e) => setOrganization(e.target.value)}
-            >
-              {/* map organizations that the user belongs to */}
-              <MenuItem value={10}>WUEC</MenuItem>
-              <MenuItem value={20}>Kite and Key</MenuItem>
-              <MenuItem value={30}>Spark</MenuItem>
-            </Select>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="Event Location"
+              name="location"
+              autoComplete="location"
+              value={eventLocation}
+              onChange={(e) => setEventLocation(e.target.value)}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="Event Description"
+              name="description"
+              autoComplete="description"
+              multiline
+              rows={4}
+              value={eventDescription}
+              onChange={(e) => setEventDescription(e.target.value)}
+            />
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Organization</InputLabel>
+              <Select
+                value={organization}
+                label="Organization"
+                onChange={(e) => setOrganization(e.target.value)}
+              >
+                <MenuItem value="WUEC">WUEC</MenuItem>
+                <MenuItem value="Kite and Key">Kite and Key</MenuItem>
+                <MenuItem value="Spark">Spark</MenuItem>
+              </Select>
+            </FormControl>
             <Button
               type="submit"
               fullWidth
@@ -112,11 +161,9 @@ function RegisterEvent() {
             >
               Submit
             </Button>
-
           </form>
         </Container>
-
-      </ContentBox>
+        </ContentBox>
     </Box>
   );
 }
