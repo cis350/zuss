@@ -88,7 +88,7 @@ app.post('/login', async (req, res) => {
 app.get('/events-data', async (_req, res) => {
   console.log('/events-data');
   try {
-    const data = await database.fetchEventData();
+    const data = await database.fetchEvents();
     console.log('successfully got the data');
     console.log('data:', data);
     return res.status(200).json({ data, message: 'Successfully received sample data.' });
@@ -133,5 +133,6 @@ app.use(express.static(path.join(__dirname, '../zuss-app/build')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../zuss-app/build/index.html'));
 });
+
 
 module.exports = app;
