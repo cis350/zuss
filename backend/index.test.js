@@ -116,7 +116,8 @@ describe('sign up', () => {
 
 describe('GET /events-data', () => {
   it('should fetch events data successfully', async () => {
-    const mockEventData = [{ name: 'Event 1', date: '2024-01-01', location: 'Venue 1' }];
+    const mockEventData = [{ name: 'Event 1', date: '2024-01-01', location: 'Venue 1', blurb: 'hi',
+    descriptionLong: 'hello', organization: 'kite' }];
     jest.spyOn(database, 'fetchEvents').mockResolvedValue(mockEventData);
 
     const response = await request(app).get('/events-data');
@@ -134,7 +135,8 @@ describe('POST /post-event', () => {
     name: 'New Event',
     date: '2024-02-02',
     location: 'New Venue',
-    description: 'A detailed description of the event',
+    blurb: 'A detailed description of the event',
+    descriptionLong: 'A detailed description of the event',
     organizer: 'Organizer Name',
   };
 

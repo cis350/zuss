@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  AppBar, Toolbar, Typography, Button, Box, Card, CardContent, CardMedia, Grid, Container, Modal
+  AppBar, Toolbar, Typography, Button, Box, Card, CardContent, CardMedia, Grid, Container, Modal, Chip
 } from '@mui/material';
 import { styled } from '@mui/system';
-import { blue } from '@mui/material/colors';
 
 const StyledAppBar = styled(AppBar)({
   backgroundColor: '#123456',
@@ -42,16 +41,11 @@ function Homepage() {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
       }
-    }) 
-    .then(res => {
-      if (!res.ok) { 
-        throw new Error('Network response was not ok');
-      }
-      return res.json();
     })
+    .then(res => res.json())
     .then(data => {
       if (data && Array.isArray(data.data)) {
-        setData(data.data.map((item, index) => ({ ...item, id: index })));
+        setData(data.data);
       } else {
         console.error('Data received is not an array:', data);
       }
@@ -60,7 +54,6 @@ function Homepage() {
       console.error('Error fetching data:', error);
     });
   }, []);
-  
 
   function handleCloseModal() {
     setShowModal(false);
@@ -118,8 +111,11 @@ function Homepage() {
                       {card.eventName}
                     </Typography>
                     <Typography>
-                      {card.description}
+                      {card.blurb}
                     </Typography>
+                    <Chip label={`Location: ${card.location}`} sx={{ mt: 2 }} />
+              <Chip label={`Date: ${card.date}`} sx={{ mt: 2 }} />
+              <Chip label={`Club: ${card.organization}`} sx={{ mt: 2 }} />
                   </CardContent>
                 </Card>
               </Grid>
@@ -146,9 +142,15 @@ function Homepage() {
               <Typography id="modal-modal-title" variant="h6" component="h2">
                 {selectedCard.eventName}
               </Typography>
-              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              <Typography  data-testid="modal-modal-blurb" sx={{ mt: 2 }}>
+                {selectedCard.blurb}
+              </Typography>
+              <Typography  data-testid="modal-modal-description" sx={{ mt: 2 }}>
                 {selectedCard.descriptionLong}
               </Typography>
+              <Chip label={`Location: ${selectedCard.location}`} sx={{ mt: 2 }} />
+              <Chip label={`Date: ${selectedCard.date}`} sx={{ mt: 2 }} />
+              <Chip label={`Club: ${selectedCard.organization}`} sx={{ mt: 2 }} />
               <Button onClick={handleCloseModal} sx={{ mt: 2, width: '100%' }}>Close</Button>
             </Box>
           </Modal>

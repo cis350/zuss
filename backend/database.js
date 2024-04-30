@@ -90,34 +90,30 @@ async function fetchAccountData() {
     throw new Error(error);
   }
 }
-async function insertEventData(eventName, eventDate, eventLocation, eventDescription, eventOrganizer) {
+async function insertEventData(eventName, eventDate, eventLocation, blurb, descriptionLong, eventOrganizer) {
   const db = await connect();
   const collection = db.collection('Events');
-  const existingName = await collection.findOne({ name: eventName });
-  const existingDate = await collection.findOne({ date: eventDate });
-  const existingLocation = await collection.findOne({ location: eventLocation });
-  const existingDescription = await collection.findOne({ description: eventDescription });
-  const existingOrganizer = await collection.findOne({ organization: eventOrganizer });
+  const existing = await collection.findOne({ name: eventName, date: eventDate });
 
-  if (existingName && existingDate && existingLocation && existingDescription
-    && existingOrganizer) {
+  if (existing) {
     throw new Error('Event already exists');
   }
-  // then insert document in Events collection
+
   try {
     const result = await collection.insertOne({
       name: eventName,
       date: eventDate,
       location: eventLocation,
-      description: eventDescription,
+      blurb,
+      descriptionLong,
       organization: eventOrganizer,
     });
-    // log number of inserted documents for testing for
     console.log(`${result.insertedCount} documents were inserted`);
   } catch (error) {
     throw new Error(error);
   }
 }
+
 async function fetchEventData(eventName) {
   const db = await connect();
   const collection = db.collection('Events');

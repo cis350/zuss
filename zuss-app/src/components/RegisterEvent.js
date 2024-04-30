@@ -32,9 +32,10 @@ const ContentBox = styled(Box)(({ theme }) => ({
 
 function RegisterEvent() {
   const navigate = useNavigate();
+  const [blurb, setBlurb] = useState('');
+  const [descriptionLong, setDescriptionLong] = useState('');
   const [eventName, setEventName] = useState('');
   const [eventDate, setEventDate] = useState('');
-  const [eventDescription, setEventDescription] = useState('');
   const [eventLocation, setEventLocation] = useState('');
   const [organization, setOrganization] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -55,7 +56,8 @@ function RegisterEvent() {
         name: eventName,
         date: eventDate,
         location: eventLocation,
-        description: eventDescription,
+        blurb: blurb,
+        descriptionLong: descriptionLong,
         organizer: organization
       });
 
@@ -114,7 +116,7 @@ function RegisterEvent() {
               name="date"
               label="Event Date"
               type="date"
-              value={eventDate}
+              InputLabelProps={{ shrink: true }} 
               onChange={(e) => setEventDate(e.target.value)}
             />
             <TextField
@@ -128,19 +130,30 @@ function RegisterEvent() {
               value={eventLocation}
               onChange={(e) => setEventLocation(e.target.value)}
             />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              label="Event Description"
-              name="description"
-              autoComplete="description"
-              multiline
-              rows={4}
-              value={eventDescription}
-              onChange={(e) => setEventDescription(e.target.value)}
-            />
+             <TextField
+        variant="outlined"
+        margin="normal"
+        required
+        fullWidth
+        label="Blurb (Short Description)"
+        name="blurb"
+        autoComplete="blurb"
+        value={blurb}
+        onChange={(e) => setBlurb(e.target.value)}
+      />
+      <TextField
+        variant="outlined"
+        margin="normal"
+        required
+        fullWidth
+        label="Full Description"
+        name="descriptionLong"
+        autoComplete="description long"
+        multiline
+        rows={4}
+        value={descriptionLong}
+        onChange={(e) => setDescriptionLong(e.target.value)}
+      />
             <FormControl fullWidth margin="normal">
               <InputLabel>Organization</InputLabel>
               <Select

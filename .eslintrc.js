@@ -3,9 +3,14 @@ module.exports = {
     browser: true,
     es2021: true,
     node: true,
+    'cypress/globals': true,
   },
   extends: [
     'airbnb',
+    'plugin:cypress/recommended',
+  ],
+  plugins: [
+    'cypress',
   ],
   parserOptions: {
     ecmaVersion: 2021,
