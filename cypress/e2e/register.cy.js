@@ -14,8 +14,8 @@ describe('Registration Functionality', () => {
     });
 
     it('shows an error for an existing username during registration', () => {
-        cy.get('input[name="username"]').type('existinguser');
-        cy.get('input[name="password"]').type('password');
+        cy.get('input[name="username"]').type('emily');
+        cy.get('input[name="password"]').type('pass');
         cy.get('form').submit();
         cy.get('.error-message').should('contain', 'Username already exists.');
     });

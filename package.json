@@ -6,11 +6,12 @@
   "scripts": {
     "test": "NODE_ENV=test jest",
     "start": "concurrently \"npm run start --prefix backend\" \"npm run start --prefix zuss-app\"",
+    "start:backend": "cd backend && node server.js",
+    "start:frontend": "cd zuss-app && npm start",
+    "cypress:run": "concurrently --kill-others \"npm run start:backend\" \"npm run start:frontend\" --success first \"cypress run --config baseUrl=http://localhost:3000\"",
     "lint": "eslint . --ext .js,.jsx",
     "lint:fix": "eslint . --ext .js,.jsx --fix",
-    "run:cypress": "concurrently \"npm run start:backend\" \"npm run start:frontend\" \"npm run cypress:open\"",
-    "start:backend": "npm start --prefix backend",
-    "start:frontend": "npm start --prefix zuss-app",
+   
    "cypress:open": "cypress open",
   "author": "",
   "license": "ISC",
@@ -36,4 +37,5 @@
     "jest": "^29.7.0",
     "supertest": "^6.3.4"
   }
+}
 }
