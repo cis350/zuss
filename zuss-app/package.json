@@ -18,7 +18,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "test": "react-scripts test",
+    "test": "react-scripts test --coverage",
     "lint": "eslint . --fix",
     "eject": "react-scripts eject",
     "build": "react-scripts build",
