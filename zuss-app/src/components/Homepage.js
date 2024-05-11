@@ -1,10 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  AppBar, Toolbar, Typography, Button, Box, Card, CardContent, CardMedia, Grid, Container, Modal
+  AppBar, Toolbar, Typography, Button, Box, Card, CardContent, CardMedia, Grid, Container, Modal, TextField
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+
 import { styled } from '@mui/system';
 import { blue } from '@mui/material/colors';
+
+
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import Chip from '@mui/material/Chip';
+
 
 const StyledAppBar = styled(AppBar)({
   backgroundColor: '#123456',
@@ -29,6 +40,104 @@ const ContentBox = styled(Box)(({ theme }) => ({
   backgroundColor: '#456789',
   minHeight: '100vh',
 }));
+
+
+const names = [
+  'WUEC',
+  'Kite and Key',
+  'Spark',
+];
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+function getStyles(name, personName, theme) {
+  return {
+    fontWeight:
+      personName.indexOf(name) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium,
+  };
+}
+
+function MultipleSelectChip() {
+  const [personName, setPersonName] = React.useState([]);
+
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setPersonName(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
+
+  return (
+    <div>
+      <FormControl sx={{width: 300 }}>
+        <InputLabel id="demo-multiple-chip-label">Organization</InputLabel>
+        <Select
+          labelId="demo-multiple-chip-label"
+          id="demo-multiple-chip"
+          multiple
+          value={personName}
+          onChange={handleChange}
+          input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+          renderValue={(selected) => (
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+              {selected.map((value) => (
+                <Chip key={value} label={value} />
+              ))}
+            </Box>
+          )}
+          MenuProps={MenuProps}
+        >
+          {names.map((name) => (
+            <MenuItem
+              key={name}
+              value={name}
+              
+            >
+              {name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </div>
+  );
+}
+
+function Filter() {
+  const [eventName, setEventName] = useState('');
+  const [organization, setOrganizationName] = useState('');
+  return (
+    <div style={{margin:"40px"}}>
+      <Typography variant="h5" sx={{ color: 'white', mb: 4 }}>
+        Search Events
+      </Typography>
+      <Grid container spacing={3} >
+        <Grid item xs={20}>
+          <TextField label='Event Name' value={eventName} onChange={(e) => setEventName(e.target.value)} style={{ width: "100%" }}/>
+        </Grid>
+        <Grid item xs={20}>
+          <MultipleSelectChip/>
+        </Grid>
+        
+      </Grid>
+      <Button>Search</Button>
+        
+    </div>
+  )
+}
 
 function Homepage() {
   const navigate = useNavigate();
@@ -80,6 +189,8 @@ function Homepage() {
     navigate('/register-event');
   };
 
+  
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <StyledAppBar position="static">
@@ -100,6 +211,7 @@ function Homepage() {
           Upcoming Events
         </Typography>
         <Container maxWidth="md">
+        <Filter/>
           <Grid container spacing={4}>
             {data.map((card) => (
               <Grid item key={card.id} xs={12} sm={6} md={4}>
