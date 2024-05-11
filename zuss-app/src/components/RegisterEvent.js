@@ -35,6 +35,7 @@ function RegisterEvent() {
   const [eventName, setEventName] = useState('');
   const [eventDate, setEventDate] = useState('');
   const [eventDescription, setEventDescription] = useState('');
+  const [eventImage, setEventImage] = useState('');
   const [eventLocation, setEventLocation] = useState('');
   const [organization, setOrganization] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -56,7 +57,8 @@ function RegisterEvent() {
         date: eventDate,
         location: eventLocation,
         description: eventDescription,
-        organizer: organization
+        organizer: organization,
+        image: eventImage
       });
 
       
@@ -112,7 +114,6 @@ function RegisterEvent() {
               required
               fullWidth
               name="date"
-              label="Event Date"
               type="date"
               value={eventDate}
               onChange={(e) => setEventDate(e.target.value)}
@@ -140,6 +141,16 @@ function RegisterEvent() {
               rows={4}
               value={eventDescription}
               onChange={(e) => setEventDescription(e.target.value)}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              label="Image URL"
+              name="image_url"
+              value={eventImage}
+              onChange={(e) => setEventImage(e.target.value)}
             />
             <FormControl fullWidth margin="normal">
               <InputLabel>Organization</InputLabel>

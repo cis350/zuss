@@ -99,14 +99,14 @@ app.get('/events-data', async (_req, res) => {
 });
 
 app.post('/post-event', async (req, res) => {
-  const { name, date, location, description, organizer } = req.body;
+  const { name, date, location, description, organizer, image } = req.body;
 
   if (!name || !date || !organizer || !location || !description) {
     return res.status(400).json({ message: 'Event name, date, and organizer are required.' });
   }
 
   try {
-    await database.insertEventData(name, date, location, description, organizer);
+    await database.insertEventData(name, date, location, description, organizer, image);
     return res.status(201).json({ message: 'Successfully registered event.' });
   } catch (error) {
     // if error inserting data, send 500 level error code

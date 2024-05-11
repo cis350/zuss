@@ -90,7 +90,7 @@ async function fetchAccountData() {
     throw new Error(error);
   }
 }
-async function insertEventData(eventName, eventDate, eventLocation, eventDescription, eventOrganizer) {
+async function insertEventData(eventName, eventDate, eventLocation, eventDescription, eventOrganizer, eventImage) {
   const db = await connect();
   const collection = db.collection('Events');
   const existingName = await collection.findOne({ name: eventName });
@@ -111,6 +111,7 @@ async function insertEventData(eventName, eventDate, eventLocation, eventDescrip
       location: eventLocation,
       description: eventDescription,
       organization: eventOrganizer,
+      image: eventImage
     });
     // log number of inserted documents for testing for
     console.log(`${result.insertedCount} documents were inserted`);

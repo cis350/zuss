@@ -111,11 +111,14 @@ function Homepage() {
                     component="img"
                     sx={{ height: 140 }}
                     image={card.image}
-                    alt={card.eventName}
+                    alt={card.name}
                   />
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
-                      {card.eventName}
+                      {card.name}
+                    </Typography>
+                    <Typography>
+                      {card.organization}
                     </Typography>
                     <Typography>
                       {card.description}
