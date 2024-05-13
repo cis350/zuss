@@ -3,10 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import {
   AppBar, Toolbar, Typography, Button, Box, Card, CardContent, CardMedia, Grid, Container, Modal, TextField
 } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
 
 import { styled } from '@mui/system';
-import { blue } from '@mui/material/colors';
 
 
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -85,7 +83,7 @@ function MultipleSelectChip({onUpdate}) {
   return (
     <div>
       <FormControl sx={{width: 300 }}>
-        <InputLabel id="demo-multiple-chip-label">Organization</InputLabel>
+        <InputLabel id="demo-multiple-chip-label" sx={{color:'white'}}>Organization</InputLabel>
         <Select
           labelId="demo-multiple-chip-label"
           id="demo-multiple-chip"
@@ -117,11 +115,37 @@ function MultipleSelectChip({onUpdate}) {
   );
 }
 
-function Filter() {
+function Filter({setData}) {
   const [eventName, setEventName] = useState('');
   const [organizations, setOrganizations] = React.useState([]);
   const handleChange = (newValue) => {
     setOrganizations(newValue);
+  };
+  const searchOnClick = () => {
+    const searchParams = { eventName, organizations };
+    fetch('http://localhost:8000/events-data-filtered', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(searchParams)
+    }) 
+    .then(res => {
+      if (!res.ok) { 
+        throw new Error('Network response was not ok');
+      }
+      return res.json();
+    })
+    .then(data => {
+      if (data && Array.isArray(data.data)) {
+        setData(data.data.map((item, index) => ({ ...item, id: index })));
+      } else {
+        console.error('Data received is not an array:', data);
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+    });
   };
   return (
     <div style={{margin:"40px"}}>
@@ -130,14 +154,16 @@ function Filter() {
       </Typography>
       <Grid container spacing={3} >
         <Grid item xs={20}>
-          <TextField label='Event Name' value={eventName} onChange={(e) => setEventName(e.target.value)} style={{ width: "100%" }}/>
+          <TextField variant="filled" label='Event Name' value={eventName} onChange={(e) => setEventName(e.target.value)} style={{ width: "100%" }}/>
         </Grid>
         <Grid item xs={20}>
           <MultipleSelectChip onUpdate={handleChange}/>
         </Grid>
-        
+        <Grid item xs={20}>
+          <Button onClick={searchOnClick} variant="contained">Search</Button>
+        </Grid>
       </Grid>
-      <Button>Search</Button>
+      
         
     </div>
   )
@@ -148,7 +174,7 @@ function Homepage() {
   const [data, setData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
-
+  
   useEffect(() => {
     fetch('http://localhost:8000/events-data', {
       headers: {
@@ -215,7 +241,7 @@ function Homepage() {
           Upcoming Events
         </Typography>
         <Container maxWidth="md">
-        <Filter/>
+        <Filter setData={setData}/>
           <Grid container spacing={4}>
             {data.map((card) => (
               <Grid item key={card.id} xs={12} sm={6} md={4}>
@@ -273,6 +299,7 @@ function Homepage() {
           </Modal>
         )}
       </ContentBox>
+      
     </Box>
   );
 }

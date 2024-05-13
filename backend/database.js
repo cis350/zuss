@@ -146,10 +146,24 @@ async function fetchEvents() {
   }
 }
 
+async function fetchEventsFiltered(eventName, organizations){
+  const db = await connect();
+  const collection = db.collection('Events');
+
+  try {
+    // in mongodb, get all events that contain name and organization in organizations
+    console.log("eventName ", eventName)
+    const data = await collection.find({ name: { $regex: eventName, $options: "i" }, organization: { $in: organizations } }).toArray();
+    return data;
+  } catch (error) {
+    throw new Error(error);
+  }
+}
+
 async function close() {
   await client.close();
 }
 
 module.exports = {
-  connect, insertAccountData, insertEventData, fetchAccountData, fetchEvents, fetchEventData, client, close,
+  connect, insertAccountData, insertEventData, fetchAccountData, fetchEvents, fetchEventData, fetchEventsFiltered, client, close,
 };
