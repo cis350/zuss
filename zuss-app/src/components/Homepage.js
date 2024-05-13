@@ -68,17 +68,18 @@ function getStyles(name, personName, theme) {
   };
 }
 
-function MultipleSelectChip() {
-  const [personName, setPersonName] = React.useState([]);
+function MultipleSelectChip({onUpdate}) {
+  
+  const [organizations, setOrganizations] = React.useState([]);
 
   const handleChange = (event) => {
     const {
       target: { value },
     } = event;
-    setPersonName(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
+    const newValue = typeof value === 'string' ? value.split(',') : value;
+    onUpdate(newValue);
+    setOrganizations(newValue);
+    
   };
 
   return (
@@ -89,7 +90,7 @@ function MultipleSelectChip() {
           labelId="demo-multiple-chip-label"
           id="demo-multiple-chip"
           multiple
-          value={personName}
+          value={organizations}
           onChange={handleChange}
           input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
           renderValue={(selected) => (
@@ -118,7 +119,10 @@ function MultipleSelectChip() {
 
 function Filter() {
   const [eventName, setEventName] = useState('');
-  const [organization, setOrganizationName] = useState('');
+  const [organizations, setOrganizations] = React.useState([]);
+  const handleChange = (newValue) => {
+    setOrganizations(newValue);
+  };
   return (
     <div style={{margin:"40px"}}>
       <Typography variant="h5" sx={{ color: 'white', mb: 4 }}>
@@ -129,7 +133,7 @@ function Filter() {
           <TextField label='Event Name' value={eventName} onChange={(e) => setEventName(e.target.value)} style={{ width: "100%" }}/>
         </Grid>
         <Grid item xs={20}>
-          <MultipleSelectChip/>
+          <MultipleSelectChip onUpdate={handleChange}/>
         </Grid>
         
       </Grid>
