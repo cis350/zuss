@@ -23,10 +23,6 @@ afterAll(async () => {
 const testUsername = process.env.TEST_USERNAME;
 const testPassword = process.env.TEST_PASSWORD;
 
-/**
- * Test the login endpoint
- */
-
 
 describe('login', () => {
   afterAll(async () => {
@@ -73,9 +69,7 @@ describe('login', () => {
   });
 });
 
-/**
- * Test the registration
- */
+
 describe('sign up', () => {
   afterAll(async () => {
     await database.client.close(); // Close the MongoDB connection
@@ -114,7 +108,7 @@ describe('sign up', () => {
   });
 });
 
-describe('GET /events-data', () => {
+describe('get /events-data endpoint', () => {
   it('should fetch events data successfully', async () => {
     const mockEventData = [{ name: 'Event 1', date: '2024-01-01', location: 'Venue 1' }];
     jest.spyOn(database, 'fetchEvents').mockResolvedValue(mockEventData);
@@ -129,7 +123,7 @@ describe('GET /events-data', () => {
 
 });
 
-describe('POST /post-event', () => {
+describe('/post-event endpoint', () => {
   const validEvent = {
     name: 'New Event',
     date: '2024-02-02',
@@ -149,7 +143,7 @@ describe('POST /post-event', () => {
     expect(response.body.message).toEqual('Successfully registered event.');
   });
 
-  it('reject the creation of an event when required fields are missing', async () => {
+  it('reject creation of an event when required fields are missing', async () => {
     const incompleteEvent = { ...validEvent, name: undefined };
     const response = await request(app)
       .post('/post-event')
@@ -182,3 +176,16 @@ describe('POST /post-event', () => {
   });
 });
 
+describe('get /events-data-filtered endpoint', () => {
+  it('should handle no matching events', async () => {
+    jest.spyOn(database, 'fetchEventsFiltered').mockResolvedValue([]);
+
+    const response = await request(app)
+      .post('/events-data-filtered')
+      .send({ eventName: 'Nonexistent Event', organizations: ['Nonexistent Org'] });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.data).toEqual([]);
+    expect(response.body.message).toEqual('No events found matching criteria.');
+  });
+});
