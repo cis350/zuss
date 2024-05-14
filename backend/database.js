@@ -15,13 +15,6 @@ const dbName = 'FormInputs';
 const client = new MongoClient(process.env.MONGODB_URI);
 console.log('connected!');
 
-// hi can you see this
-// this is actually so cool !!
-// where is your .env file? the non test one
-// IT WORKSSSS
-// wait jk it doesnt but ya omg its so magical
-// rn its in the root directory but she's been moving around
-
 /**
  * Asynchronously connects to the MongoDB database
  *
@@ -89,9 +82,24 @@ async function fetchAccountData() {
     throw new Error(error);
   }
 }
+
+/**
+ * Inserts event data into the 'Events' collection in the database.
+ * 
+ * @async
+ * @function insertEventData
+ * @param {string} eventName - The name of the event.
+ * @param {string} eventDate - The date of the event.
+ * @param {string} eventLocation - The location of the event.
+ * @param {string} eventDescription - The description of the event.
+ * @param {string} eventOrganizer - The organizer of the event.
+ * @param {string} eventImage - The image URL of the event.
+ * @throws {Error} If the event already exists or if there is an error inserting the event.
+ */
 async function insertEventData(eventName, eventDate, eventLocation, eventDescription, eventOrganizer, eventImage) {
   const db = await connect();
   const collection = db.collection('Events');
+
 
   const existingEvent = await collection.findOne({
     name: eventName,
@@ -102,9 +110,10 @@ async function insertEventData(eventName, eventDate, eventLocation, eventDescrip
   });
 
   if (existingEvent) {
+
     throw new Error('Event already exists');
   }
-  // then insert document in Events collection
+
   try {
     const result = await collection.insertOne({
       name: eventName,
@@ -114,12 +123,21 @@ async function insertEventData(eventName, eventDate, eventLocation, eventDescrip
       organization: eventOrganizer,
       image: eventImage
     });
-    // log number of inserted documents for testing for
     console.log(`${result.insertedCount} documents were inserted`);
   } catch (error) {
     throw new Error(error);
   }
 }
+
+/**
+ * Fetches event data by event name from the 'Events' collection in the database.
+ * 
+ * @async
+ * @function fetchEventData
+ * @param {string} eventName - The name of the event to fetch.
+ * @returns {Object} The event data.
+ * @throws {Error} If the event is not found or if there is an error fetching the event.
+ */
 async function fetchEventData(eventName) {
   const db = await connect();
   const collection = db.collection('Events');
@@ -135,6 +153,14 @@ async function fetchEventData(eventName) {
   }
 }
 
+/**
+ * Fetches all events from the 'Events' collection in the database.
+ * 
+ * @async
+ * @function fetchEvents
+ * @returns {Array<Object>} An array of all event data.
+ * @throws {Error} If there is an error fetching the events.
+ */
 async function fetchEvents() {
   const db = await connect();
   const collection = db.collection('Events');
@@ -147,27 +173,41 @@ async function fetchEvents() {
   }
 }
 
+/**
+ * Fetches filtered events by event name and organizations from the 'Events' collection in the database.
+ * 
+ * @async
+ * @function fetchEventsFiltered
+ * @param {string} eventName - The name of the event to filter by.
+ * @param {Array<string>} organizations - An array of organization names to filter by.
+ * @returns {Array<Object>} An array of filtered event data.
+ * @throws {Error} If there is an error fetching the events.
+ */
 async function fetchEventsFiltered(eventName, organizations){
   const db = await connect();
   const collection = db.collection('Events');
 
   try {
-    // in mongodb, get all events that contain name and organization in organizations
     console.log("fetchEventsFiltered, organizations ", organizations);
     if (organizations.length == 0){
-      console.log("organizations is empty, fetching all orgs")
+      console.log("organizations is empty, fetching all orgs");
       const data = await collection.find({ name: { $regex: eventName, $options: "i" }}).toArray();
       return data;
     } else {
       const data = await collection.find({ name: { $regex: eventName, $options: "i" }, organization: { $in: organizations } }).toArray();
       return data;
     }
-    
   } catch (error) {
     throw new Error(error);
   }
 }
 
+/**
+ * Closes the database connection.
+ * 
+ * @async
+ * @function close
+ */
 async function close() {
   await client.close();
 }
