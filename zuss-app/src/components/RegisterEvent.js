@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {
@@ -39,6 +39,32 @@ function RegisterEvent() {
   const [eventLocation, setEventLocation] = useState('');
   const [organization, setOrganization] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [organizations, setOrganizations] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:8000/events-data', {
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    }) 
+    .then(res => {
+      if (!res.ok) { 
+        throw new Error('Network response was not ok');
+      }
+      return res.json();
+    })
+    .then(data => {
+      if (data && Array.isArray(data.data)) {
+        setOrganizations([...new Set(data.data.map(item => item.organization))]);
+      } else {
+        console.error('Data received is not an array:', data);
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+    });
+  }, []);
 
   const handleLogout = () => {
     navigate('/');
@@ -159,9 +185,18 @@ function RegisterEvent() {
                 label="Organization"
                 onChange={(e) => setOrganization(e.target.value)}
               >
+                
                 <MenuItem value="WUEC">WUEC</MenuItem>
                 <MenuItem value="Kite and Key">Kite and Key</MenuItem>
-                <MenuItem value="Spark">Spark</MenuItem>
+                
+                {organizations.map((name) => (
+                  <MenuItem
+                    key={name}
+                    value={name}
+                  >
+                    {name}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
             <Button

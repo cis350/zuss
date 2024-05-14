@@ -46,6 +46,8 @@ const names = [
   'Spark',
 ];
 
+
+
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -66,7 +68,7 @@ function getStyles(name, personName, theme) {
   };
 }
 
-function MultipleSelectChip({onUpdate}) {
+function MultipleSelectChip({onUpdate, allOrganizations}) {
   
   const [organizations, setOrganizations] = React.useState([]);
 
@@ -100,7 +102,7 @@ function MultipleSelectChip({onUpdate}) {
           )}
           MenuProps={MenuProps}
         >
-          {names.map((name) => (
+          {allOrganizations.map((name) => (
             <MenuItem
               key={name}
               value={name}
@@ -115,7 +117,8 @@ function MultipleSelectChip({onUpdate}) {
   );
 }
 
-function Filter({setData}) {
+function Filter({setData, allOrganizations}) {
+  console.log("Filter, all organizations = ", allOrganizations);
   const [eventName, setEventName] = useState('');
   const [organizations, setOrganizations] = React.useState([]);
   const handleChange = (newValue) => {
@@ -157,7 +160,7 @@ function Filter({setData}) {
           <TextField variant="filled" label='Event Name' value={eventName} onChange={(e) => setEventName(e.target.value)} style={{ width: "100%" }}/>
         </Grid>
         <Grid item xs={20}>
-          <MultipleSelectChip onUpdate={handleChange}/>
+          <MultipleSelectChip onUpdate={handleChange} allOrganizations={allOrganizations}/>
         </Grid>
         <Grid item xs={20}>
           <Button onClick={searchOnClick} variant="contained">Search</Button>
@@ -176,6 +179,9 @@ function Homepage() {
   const [data, setData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
+
+  const [allOrganizations, setAllOrganizations] = useState([]);
+  
   
   useEffect(() => {
     fetch('http://localhost:8000/events-data', {
@@ -193,7 +199,7 @@ function Homepage() {
     .then(data => {
       if (data && Array.isArray(data.data)) {
         setData(data.data.map((item, index) => ({ ...item, id: index })));
-        // setAllOrganizations([...new Set(data.data.map(item => item.organization))]);
+        setAllOrganizations([...new Set(data.data.map(item => item.organization))]);
       } else {
         console.error('Data received is not an array:', data);
       }
@@ -286,7 +292,7 @@ function Homepage() {
     )
   }
 
-  
+  console.log("homepage, all organiaztions = ", allOrganizations);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -308,7 +314,7 @@ function Homepage() {
           Upcoming Events
         </Typography>
         <Container maxWidth="md">
-        <Filter setData={setData}/>
+        <Filter setData={setData} allOrganizations={allOrganizations}/>
           <Grid container spacing={4}>
             {data.map((card) => (
               <Grid item key={card.id} xs={12} sm={6} md={4}>
