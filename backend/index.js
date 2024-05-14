@@ -104,8 +104,13 @@ app.post('/events-data-filtered', async (req, res) => {
     const data = await database.fetchEventsFiltered(req.body.eventName, req.body.organizations);
     console.log('successfully got the data');
     console.log('data:', data);
-    return res.status(200).json({ data, message: 'Successfully received sample data.' });
-    
+
+    if (data.length === 0) {
+      return res.status(200).json({ data, message: 'No events found matching criteria.' });
+    } else {
+      return res.status(200).json({ data, message: 'Successfully received sample data.' });
+    }
+
   } catch (error) {
     console.error('Error receiving sample data:', error);
     return res.status(500).json({ message: error });
