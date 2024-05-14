@@ -5,6 +5,7 @@ import {
   AppBar, Toolbar, Typography, Button, Box, Container, TextField, Select, MenuItem, InputLabel, FormControl
 } from '@mui/material';
 import { styled } from '@mui/system';
+import NavBar from './Navbar';
 
 const StyledAppBar = styled(AppBar)({
   backgroundColor: '#123456',
@@ -102,7 +103,8 @@ function RegisterEvent() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <StyledAppBar position="static">
+      <NavBar handleHomepage={handleHomepage} handleLogout={handleLogout}/>
+      {/* <StyledAppBar position="static">
         <StyledToolbar>
           <StyledButton color="inherit" onClick={handleHomepage}>
             Homepage
@@ -114,7 +116,7 @@ function RegisterEvent() {
             Logout
           </StyledButton>
         </StyledToolbar>
-      </StyledAppBar>
+      </StyledAppBar> */}
       <ContentBox>
         <Container component="main" maxWidth="xs">
           <Typography component="h1" variant="h5">

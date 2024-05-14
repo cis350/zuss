@@ -6,28 +6,7 @@ import {
 import { styled } from '@mui/system';
 import Filter from './Filter'; // Make sure this path is correct
 import ZussModalContents from './ZussModal';
-
-
-const StyledAppBar = styled(AppBar)({
-  backgroundColor: '#123456',
-  color: 'white',
-});
-
-
-
-
-const StyledToolbar = styled(Toolbar)({
-  justifyContent: 'space-between',
-});
-
-const Title = styled(Typography)({
-  flexGrow: 1,
-  textAlign: 'center',
-});
-
-const StyledButton = styled(Button)({
-  margin: '0 12px',
-});
+import NavBar from './Navbar';
 
 const ContentBox = styled(Box)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -83,17 +62,7 @@ function Homepage() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <StyledAppBar position="static">
-        <StyledToolbar>
-          <StyledButton color="inherit" onClick={handleRegisterEvent}>
-            Register Event
-          </StyledButton>
-          <Title variant="h6">Dashboard</Title>
-          <StyledButton color="inherit" onClick={handleLogout}>
-            Logout
-          </StyledButton>
-        </StyledToolbar>
-      </StyledAppBar>
+      <NavBar handleRegisterEvent={handleRegisterEvent} handleLogout={handleLogout}/>
       <ContentBox>
         <Typography variant="h4" sx={{ color: 'white', mb: 4 }}>
           Upcoming Events
