@@ -12,7 +12,6 @@ if (process.env.NODE_ENV === 'test') {
 const { MongoClient } = require('mongodb');
 
 const dbName = 'FormInputs';
-console.log(`connecting to ${process.env.MONGODB_URI}`);
 const client = new MongoClient(process.env.MONGODB_URI);
 console.log('connected!');
 
@@ -93,14 +92,16 @@ async function fetchAccountData() {
 async function insertEventData(eventName, eventDate, eventLocation, eventDescription, eventOrganizer, eventImage) {
   const db = await connect();
   const collection = db.collection('Events');
-  const existingName = await collection.findOne({ name: eventName });
-  const existingDate = await collection.findOne({ date: eventDate });
-  const existingLocation = await collection.findOne({ location: eventLocation });
-  const existingDescription = await collection.findOne({ description: eventDescription });
-  const existingOrganizer = await collection.findOne({ organization: eventOrganizer });
 
-  if (existingName && existingDate && existingLocation && existingDescription
-    && existingOrganizer) {
+  const existingEvent = await collection.findOne({
+    name: eventName,
+    date: eventDate,
+    location: eventLocation,
+    description: eventDescription,
+    organization: eventOrganizer,
+  });
+
+  if (existingEvent) {
     throw new Error('Event already exists');
   }
   // then insert document in Events collection

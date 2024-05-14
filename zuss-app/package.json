@@ -18,9 +18,10 @@
     "react-scripts": "^5.0.1",
     "web-vitals": "^2.1.4"
   },
+  
   "scripts": {
     "start": "react-scripts start",
-    "test": "react-scripts test",
+    "test": "react-scripts test --coverage",
     "lint": "eslint . --fix",
     "eject": "react-scripts eject",
     "build": "react-scripts build",
@@ -45,9 +46,12 @@
     ]
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.24.5",
+    "@babel/preset-react": "^7.24.1",
     "@csstools/postcss-color-function": "^3.0.12",
     "@csstools/postcss-progressive-custom-properties": "^3.1.1",
     "@testing-library/jest-dom": "^6.4.2",
+    "babel-jest": "^29.7.0",
     "copyfiles": "^2.4.1",
     "eslint": "^8.57.0",
     "eslint-config-airbnb": "^19.0.4",

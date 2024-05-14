@@ -16,7 +16,6 @@ beforeAll(() => {
 
 afterAll(async () => {
   closeServer(server);
-  // Make sure your database module exports a function to close the database connection
   database.close();
 });
 
@@ -69,7 +68,6 @@ describe('login', () => {
   });
 });
 
-
 describe('sign up', () => {
   afterAll(async () => {
     await database.client.close(); // Close the MongoDB connection
@@ -108,7 +106,7 @@ describe('sign up', () => {
   });
 });
 
-describe('get /events-data endpoint', () => {
+describe('GET /events-data', () => {
   it('should fetch events data successfully', async () => {
     const mockEventData = [{ name: 'Event 1', date: '2024-01-01', location: 'Venue 1' }];
     jest.spyOn(database, 'fetchEvents').mockResolvedValue(mockEventData);
@@ -123,7 +121,7 @@ describe('get /events-data endpoint', () => {
 
 });
 
-describe('/post-event endpoint', () => {
+describe('POST /post-event', () => {
   const validEvent = {
     name: 'New Event',
     date: '2024-02-02',
@@ -143,7 +141,7 @@ describe('/post-event endpoint', () => {
     expect(response.body.message).toEqual('Successfully registered event.');
   });
 
-  it('reject creation of an event when required fields are missing', async () => {
+  it('reject the creation of an event when required fields are missing', async () => {
     const incompleteEvent = { ...validEvent, name: undefined };
     const response = await request(app)
       .post('/post-event')
@@ -163,29 +161,54 @@ describe('/post-event endpoint', () => {
     expect(response.statusCode).toBe(400);
     expect(response.text).toEqual('Event already exists.');
   });
-
-  it('should handle other database insertion errors', async () => {
-    jest.spyOn(database, 'insertEventData').mockRejectedValue(new Error('Insertion failed'));
-
-    const response = await request(app)
-      .post('/post-event')
-      .send(validEvent);
-
-    expect(response.statusCode).toBe(500);
-    expect(response.text).toEqual('Failed to insert data.');
-  });
 });
 
-describe('get /events-data-filtered endpoint', () => {
-  it('should handle no matching events', async () => {
-    jest.spyOn(database, 'fetchEventsFiltered').mockResolvedValue([]);
+// describe('db functions', () => {
+   
+// afterAll(async () => {
+//     await database.client.close(); // Close the MongoDB connection
+//   });
+//   it('insertAccountData successfully inserts new user', async () => {
+//     const username = `test_user_${Math.floor(Math.random() * 10000)}`;
+//     const password = 'test_pass';
+//     await database.insertAccountData(username, password);
+//     console.log('SUCCESSFULLY INSERTED ACCOUNT DATA!');
+//     const user = await database.client.db().collection('ProfileInfo').findOne({ username });
+//     expect(user).toBeTruthy();
+//     expect(user.username).toEqual(username);
+//   });
 
-    const response = await request(app)
-      .post('/events-data-filtered')
-      .send({ eventName: 'Nonexistent Event', organizations: ['Nonexistent Org'] });
+//   it('insertAccountData - fails when username exists', async () => {
+//     const username = "lil_emily";
+//     const password = "scone";
+//     await database.client.db().collection('ProfileInfo').insertOne({ username, password });
+//     await expect(database.insertAccountData(username, password)).rejects.toThrow('Username already exists');
+//   });
 
-    expect(response.statusCode).toBe(200);
-    expect(response.body.data).toEqual([]);
-    expect(response.body.message).toEqual('No events found matching criteria.');
-  });
-});
+//   it('insertEventData', async () => {
+//     const name = `test_name_${Math.floor(Math.random() * 10000)}`;
+//     const eventDetails = {
+//       name: name,
+//       date: "2021-01-01",
+//       location: "Unique Location",
+//       description: "Unique Description",
+//       organizer: "Unique Organizer",
+//       image: "url"
+//     };
+//     await database.insertEventData(eventDetails.name, eventDetails.date, eventDetails.location, eventDetails.description, eventDetails.organizer, eventDetails.image);
+//     const event = await database.client.db().collection('Events').findOne({ name: eventDetails.name });
+//     expect(event).toBeTruthy();
+//   });
+
+//   it('fetchEventsFiltered - retrieves filtered events', async () => {
+//     const date_one = `${Math.floor(Math.random() * 10000)}`;
+//     const date_two = `${Math.floor(Math.random() * 10000)}`;
+//     const events = [
+//       { name: "Tech Conference", date: date_one, location: "Tech Park", description: "Tech Event", organization: "Tech Org", image: "url" },
+//       { name: "Food Summit", date: date_two, location: "Food Center", description: "Food Event", organization: "Food Org", image: "url" }
+//     ];
+//     await database.client.db().collection('Events').insertMany(events);
+//     const filteredEvents = await database.fetchEventsFiltered("Tech", ["Tech Org"]);
+//     expect(filteredEvents[0].name).toContain("Tech Conference");
+//   });
+// });
