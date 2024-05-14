@@ -169,6 +169,8 @@ function Filter({setData}) {
   )
 }
 
+
+
 function Homepage() {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
@@ -191,6 +193,7 @@ function Homepage() {
     .then(data => {
       if (data && Array.isArray(data.data)) {
         setData(data.data.map((item, index) => ({ ...item, id: index })));
+        // setAllOrganizations([...new Set(data.data.map(item => item.organization))]);
       } else {
         console.error('Data received is not an array:', data);
       }
@@ -201,15 +204,7 @@ function Homepage() {
   }, []);
   
 
-  function handleCloseModal() {
-    setShowModal(false);
-  }
-
-  function handleOpenModal(card) {
-    setShowModal(true);
-    setSelectedCard(card);
-  }
-
+  
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/');
@@ -218,6 +213,78 @@ function Homepage() {
   const handleRegisterEvent = () => {
     navigate('/register-event');
   };
+
+  function handleCloseModal() {
+    setShowModal(false);
+  }
+  
+  function handleOpenModal(card) {
+    setShowModal(true);
+    setSelectedCard(card);
+  }
+
+  
+  function ZussModal({card}){
+    return (
+      <Modal
+        open={showModal}
+        onClose={handleCloseModal}
+        aria-labelledby="parent-modal-title"
+        aria-describedby="parent-modal-description"
+      >
+        <Grid
+        container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+        sx={{ minHeight: '100vh' }}
+      >
+        <Grid item xs={3}>
+        <Box sx={{
+            bgcolor: 'background.paper',
+            boxShadow: 1,
+            borderRadius: 2,
+            p: 2,
+            minWidth: 300,
+            flexGrow:1
+          }}
+          width={500}
+          alignContent={'center'}>
+            <CardMedia
+              component="div"
+              sx={{
+                // 16:9
+                pt: '56.25%',
+              }}
+              image = {card.image}
+            />
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            {card.name}
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            <b>Organization</b>: {card.organization}
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            <b>Date</b>: {card.date}
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            <b>Location</b>: {card.location}
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            <b>Description</b>: {card.descriptionLong}
+          </Typography>
+          <Box textAlign='center'>
+          <Button onClick={handleCloseModal} variant="contained" sx={{ mt: 2,  width: '100%' }}>Close</Button>
+          </Box>
+        </Box>
+        </Grid>
+      </Grid>
+        
+        
+      </Modal>
+    )
+  }
 
   
 
@@ -271,7 +338,11 @@ function Homepage() {
             ))}
           </Grid>
         </Container>
-        {showModal && (
+
+        <ZussModal card={selectedCard}/>
+
+
+        {/* {showModal && (
           <Modal
             open={showModal}
             onClose={handleCloseModal}
@@ -297,7 +368,7 @@ function Homepage() {
               <Button onClick={handleCloseModal} sx={{ mt: 2, width: '100%' }}>Close</Button>
             </Box>
           </Modal>
-        )}
+        )} */}
       </ContentBox>
       
     </Box>

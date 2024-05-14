@@ -152,9 +152,16 @@ async function fetchEventsFiltered(eventName, organizations){
 
   try {
     // in mongodb, get all events that contain name and organization in organizations
-    console.log("eventName ", eventName)
-    const data = await collection.find({ name: { $regex: eventName, $options: "i" }, organization: { $in: organizations } }).toArray();
-    return data;
+    console.log("fetchEventsFiltered, organizations ", organizations);
+    if (organizations.length == 0){
+      console.log("organizations is empty, fetching all orgs")
+      const data = await collection.find({ name: { $regex: eventName, $options: "i" }}).toArray();
+      return data;
+    } else {
+      const data = await collection.find({ name: { $regex: eventName, $options: "i" }, organization: { $in: organizations } }).toArray();
+      return data;
+    }
+    
   } catch (error) {
     throw new Error(error);
   }

@@ -101,7 +101,6 @@ app.get('/events-data', async (_req, res) => {
 app.post('/events-data-filtered', async (req, res) => {
   console.log('/events-data-filtered');
   try {
-    console.log("req.body ");
     const data = await database.fetchEventsFiltered(req.body.eventName, req.body.organizations);
     console.log('successfully got the data');
     console.log('data:', data);
