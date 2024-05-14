@@ -5,11 +5,14 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/system';
 import Filter from './Filter'; // Make sure this path is correct
+import ZussModalContents from './ZussModal';
+
 
 const StyledAppBar = styled(AppBar)({
   backgroundColor: '#123456',
   color: 'white',
 });
+
 
 
 
@@ -126,36 +129,14 @@ function Homepage() {
           </Grid>
         </Container>
         {showModal && (
+          
           <Modal
           open={showModal}
           onClose={handleCloseModal}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <Box sx={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              bgcolor: 'background.paper',
-              boxShadow: 24,
-              p: 4,
-              width: 400,
-            }}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              {selectedCard.eventName || 'No Title'}
-            </Typography>
-            <Typography data-testid="modal-modal-blurb" sx={{ mt: 2 }}>
-              {selectedCard.blurb || 'No blurb available'} 
-            </Typography>
-            <Typography data-testid="modal-modal-description" sx={{ mt: 2 }}>
-              {selectedCard.descriptionLong || 'No detailed description available'} 
-            </Typography>
-            <Chip label={`Location: ${selectedCard.location}`} sx={{ mt: 2 }} />
-            <Chip label={`Date: ${selectedCard.date}`} sx={{ mt: 2 }} />
-            <Chip label={`Club: ${selectedCard.organization}`} sx={{ mt: 2 }} />
-            <Button onClick={handleCloseModal} sx={{ mt: 2, width: '100%' }}>Close</Button>
-          </Box>
+          <ZussModalContents card={selectedCard} onClose={handleCloseModal}/>
         </Modal>
         )}
       </ContentBox>

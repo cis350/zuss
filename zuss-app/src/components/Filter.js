@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Grid, TextField, Button, Typography } from '@mui/material';
 import MultipleSelectChip from './MultipleSelectChip';  // Ensure this component is correctly handling multiple selections
+import TextFieldZuss from './TextFieldZuss';
 
 function Filter({ setData, allOrganizations }) {
     const [eventName, setEventName] = useState('');
@@ -45,7 +46,7 @@ function Filter({ setData, allOrganizations }) {
             </Typography>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <TextField
+                    <TextFieldZuss
                         variant="filled"
                         label="Event Name"
                         value={eventName}
